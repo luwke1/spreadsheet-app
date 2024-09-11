@@ -37,6 +37,11 @@ namespace WinFormsApp1
             results.AppendLine("    Time Complexity: O(n^2) where n is the number of items in the list.");
             results.AppendLine("    For each number in the list, it loops through the entire list until it finds another duplicate, if no duplicate add to unique number counter");
 
+            // Sorted Method Output
+            int sortMethodCount = DuplicatesHashMethod(randomNums);
+            results.AppendLine($"3. Sorted Method: {sortMethodCount} unique numbers");
+            results.AppendLine("    Time Complexity: O(nlogn) where n is the number of items in the list.");
+            results.AppendLine("    Takes the longest complexity which is the sort method, which averages around O(nlogn)");
 
             // Update text box to proper output
             textBox1.Text =  results.ToString();
@@ -109,6 +114,25 @@ namespace WinFormsApp1
 
             // Return the amount of unique numbers found
             return uniqueCount;
+        }
+
+        // Returns the amount of duplicate numbers using a sorted list
+        private int DuplicatesSortMethod(List<int> numbers)
+        {
+            int dupeCount = 0;
+            numbers.Sort();
+
+            // Loops through if previous element is the same, add to duplicate counter
+            for (int i = 1; i < numbers.Count; i++)
+            {
+                if (numbers[i] == numbers[i - 1])
+                {
+                    dupeCount++;
+                }
+            }
+
+            // Returns the difference between total number count and duplicate count
+            return numbers.Count - dupeCount;
         }
     }
 }
