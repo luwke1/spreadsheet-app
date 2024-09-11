@@ -29,7 +29,14 @@ namespace WinFormsApp1
             int hashMethodCount = DuplicatesHashMethod(randomNums);
             results.AppendLine($"1. HashSet Method: {hashMethodCount} unique numbers");
             results.AppendLine("    Time Complexity: O(n) where n is the number of items in the list.");
-            results.AppendLine("    Loops through each random number and adds it to a hashset, if num already exists then add to duplicate counter");
+            results.AppendLine("    Loops through each random number and adds it to a hashset, then returns the hashset length");
+
+            // O(1) Space Method
+            int listMethodCount = DuplicatesListMethod(randomNums);
+            results.AppendLine($"2. O(1) Storage Method: {listMethodCount} unique numbers");
+            results.AppendLine("    Time Complexity: O(n^2) where n is the number of items in the list.");
+            results.AppendLine("    For each number in the list, it loops through the entire list until it finds another duplicate, if no duplicate add to unique number counter");
+
 
             // Update text box to proper output
             textBox1.Text =  results.ToString();
@@ -52,26 +59,56 @@ namespace WinFormsApp1
             return randomNums;
         }
 
-        // Finds the amount of duplicate numbers in a list using a hashset
+        // returns the amount of duplicate numbers in a list using a hashset
         private int DuplicatesHashMethod(List<int> numbers)
         {
-            // Intialize duplicate counter and hashset
-            int dupeCount = 0;
             Dictionary<int, int> hashNums = new Dictionary<int, int>();
 
             // Loop through each number in list, if already exists in hashset add to duplicate counter, otherwise add to set
             foreach (int num in numbers)
             {
-                if (hashNums.ContainsKey(num))
-                {
-                    dupeCount++;
-                }
-                else
+                if (!hashNums.ContainsKey(num))
                 {
                     hashNums[num] = 1;
                 }
             }
-            return dupeCount;
+
+            // Returns length of hashset
+            return hashNums.Count;
+        }
+
+        // Returns the amount of duplicate numbers in a list using a single list
+        private int DuplicatesListMethod(List<int> numbers)
+        {
+            // Intialize unique counter variable
+            int uniqueCount = 0;
+
+            // Loop through the list
+            for (int i = 0; i < numbers.Count; i++)
+            {
+                bool hasDupe = false;
+
+                // Loop through list again to find a duplicate
+                for (int j = i + 1; j < numbers.Count; j++)
+                {
+
+                    // If a duplicate is found, let outer loop know this number has a duplicate
+                    if (numbers[i] == numbers[j])
+                    {
+                        hasDupe = true;
+                        break;
+                    }
+                }
+
+                // If the current number does not have a duplicate, add it to the unique counter
+                if (!hasDupe)
+                {
+                    uniqueCount++;
+                }
+            }
+
+            // Return the amount of unique numbers found
+            return uniqueCount;
         }
     }
 }
