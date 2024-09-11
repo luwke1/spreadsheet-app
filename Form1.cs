@@ -23,22 +23,22 @@ namespace WinFormsApp1
             StringBuilder results = new StringBuilder();
 
             // Generate random number list
-            List<int> randomNums = RandomNumberList(10000, 0, 20000);
+            List<int> randomNums = randomNumberList(10000, 0, 20000);
 
             // HashSet Method Output
-            int hashMethodCount = DuplicatesHashMethod(randomNums);
+            int hashMethodCount = duplicatesHashMethod(randomNums);
             results.AppendLine($"1. HashSet Method: {hashMethodCount} unique numbers");
             results.AppendLine("    Time Complexity: O(n) where n is the number of items in the list.");
             results.AppendLine("    Loops through each random number and adds it to a hashset, then returns the hashset length");
 
             // O(1) Space Method
-            int listMethodCount = DuplicatesListMethod(randomNums);
+            int listMethodCount = duplicatesListMethod(randomNums);
             results.AppendLine($"2. O(1) Storage Method: {listMethodCount} unique numbers");
             results.AppendLine("    Time Complexity: O(n^2) where n is the number of items in the list.");
             results.AppendLine("    For each number in the list, it loops through the entire list until it finds another duplicate, if no duplicate add to unique number counter");
 
             // Sorted Method Output
-            int sortMethodCount = DuplicatesHashMethod(randomNums);
+            int sortMethodCount = duplicatesHashMethod(randomNums);
             results.AppendLine($"3. Sorted Method: {sortMethodCount} unique numbers");
             results.AppendLine("    Time Complexity: O(nlogn) where n is the number of items in the list.");
             results.AppendLine("    Takes the longest complexity which is the sort method, which averages around O(nlogn)");
@@ -48,7 +48,7 @@ namespace WinFormsApp1
         }
 
         // Generates a list of random numbers with amount of numbers, minValue, and maxValue
-        public static List<int> RandomNumberList(int amount, int minValue, int maxValue)
+        public static List<int> randomNumberList(int amount, int minValue, int maxValue)
         {
             // Generates random object
             var rand = new Random();
@@ -65,7 +65,7 @@ namespace WinFormsApp1
         }
 
         // returns the amount of duplicate numbers in a list using a hashset
-        private int DuplicatesHashMethod(List<int> numbers)
+        private int duplicatesHashMethod(List<int> numbers)
         {
             Dictionary<int, int> hashNums = new Dictionary<int, int>();
 
@@ -83,7 +83,7 @@ namespace WinFormsApp1
         }
 
         // Returns the amount of duplicate numbers in a list using a single list
-        private int DuplicatesListMethod(List<int> numbers)
+        private int duplicatesListMethod(List<int> numbers)
         {
             // Intialize unique counter variable
             int uniqueCount = 0;
@@ -117,7 +117,7 @@ namespace WinFormsApp1
         }
 
         // Returns the amount of duplicate numbers using a sorted list
-        private int DuplicatesSortMethod(List<int> numbers)
+        private int duplicatesSortMethod(List<int> numbers)
         {
             int dupeCount = 0;
             numbers.Sort();
