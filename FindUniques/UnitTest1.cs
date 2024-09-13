@@ -1,4 +1,4 @@
-namespace FindUniques
+namespace FindUniquesTest
 {
     public class Tests
     {

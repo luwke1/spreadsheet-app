@@ -5,7 +5,7 @@ VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormsApp1", "WinFormsApp1\WinFormsApp1.csproj", "{1744DEF2-C0AB-4C07-A4EB-6A29550A789C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindUniques", "FindUniques\FindUniques.csproj", "{28752A80-9E8B-419F-9F6C-2B565BE23D0C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindUniquesTest", "FindUniques\FindUniquesTest.csproj", "{28752A80-9E8B-419F-9F6C-2B565BE23D0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
