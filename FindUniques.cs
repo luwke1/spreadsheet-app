@@ -6,7 +6,7 @@ namespace WinFormsApp1
     /// <summary>
     /// The class for finding duplicates in a list using 3 different methods
     /// </summary>
-    public class FindDuplicates
+    public class FindUniques
     {
 
         /// <summary>

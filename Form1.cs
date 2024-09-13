@@ -20,7 +20,7 @@ namespace WinFormsApp1
         private void RunDistinctIntegers()
         {
             // Initialization
-            FindDuplicates findDuplicates = new FindDuplicates();
+            FindUniques findDuplicates = new FindUniques();
             StringBuilder results = new StringBuilder();
 
             // Generate random number list
