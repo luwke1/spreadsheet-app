@@ -35,6 +35,25 @@ namespace WinFormsApp1
         }
 
         /// <summary>
+        /// Saves the textBox1 content into a txt file.
+        /// </summary>
+        private void SaveFile()
+        {
+            // Opens file dialog menu
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                // Filter files to only be txt
+                saveFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
+
+                // If filename and path is determined, then create and write text to a new file
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    File.WriteAllText(saveFileDialog.FileName, textBox1.Text);
+                }
+            }
+        }
+
+        /// <summary>
         /// Changes and displays the textbox on the form to the passed in stream reader.
         /// </summary>
         /// <param name="sr">A stream reader object of a specified file path</param>
@@ -44,11 +63,19 @@ namespace WinFormsApp1
         }
 
         /// <summary>
-        /// When load a file button is clicked, it will open file dialog menu.
+        /// When load a file button is clicked, allows functionality to load a txt file content into form textBox1
         /// </summary>
         private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LoadFromFile();
+        }
+
+        /// <summary>
+        /// When save a file option is clicked, allows functionality to save text box content as a .txt
+        /// </summary>
+        private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFile();
         }
     }
 }

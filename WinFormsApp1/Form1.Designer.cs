@@ -99,6 +99,7 @@
             saveToFileToolStripMenuItem.Name = "saveToFileToolStripMenuItem";
             saveToFileToolStripMenuItem.Size = new Size(256, 22);
             saveToFileToolStripMenuItem.Text = "Save to File...";
+            saveToFileToolStripMenuItem.Click += saveToFileToolStripMenuItem_Click;
             // 
             // Form1
             // 
