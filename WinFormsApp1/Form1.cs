@@ -21,7 +21,6 @@ namespace WinFormsApp1
             textBox1.Text = "Hello World";
         }
 
-        }
     }
 }
 
