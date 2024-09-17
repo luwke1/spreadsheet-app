@@ -35,8 +35,8 @@
             openFileToolStripMenuItem = new ToolStripMenuItem();
             loadFibonacciNumbersfirst50ToolStripMenuItem = new ToolStripMenuItem();
             loadFibonacciNumbersfirst100ToolStripMenuItem = new ToolStripMenuItem();
-            saveToFileToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
+            saveToFileToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -75,6 +75,7 @@
             openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
             openFileToolStripMenuItem.Size = new Size(256, 22);
             openFileToolStripMenuItem.Text = "Load from file...";
+            openFileToolStripMenuItem.Click += openFileToolStripMenuItem_Click;
             // 
             // loadFibonacciNumbersfirst50ToolStripMenuItem
             // 
@@ -88,16 +89,16 @@
             loadFibonacciNumbersfirst100ToolStripMenuItem.Size = new Size(256, 22);
             loadFibonacciNumbersfirst100ToolStripMenuItem.Text = "Load Fibonacci numbers (first 100)";
             // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(253, 6);
+            // 
             // saveToFileToolStripMenuItem
             // 
             saveToFileToolStripMenuItem.Name = "saveToFileToolStripMenuItem";
             saveToFileToolStripMenuItem.Size = new Size(256, 22);
             saveToFileToolStripMenuItem.Text = "Save to File...";
-            // 
-            // toolStripSeparator1
-            // 
-            toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(253, 6);
             // 
             // Form1
             // 
