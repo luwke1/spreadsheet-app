@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35222.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpreadsheetApp", "SpreadsheetApp\SpreadsheetApp.csproj", "{7A953775-5926-4512-AE7C-7393B2B945EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpreadsheetTests", "SpreadsheetTests\SpreadsheetTests.csproj", "{8F7FEBE7-9C53-49B2-8F24-BD651A0E4A49}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7A953775-5926-4512-AE7C-7393B2B945EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A953775-5926-4512-AE7C-7393B2B945EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A953775-5926-4512-AE7C-7393B2B945EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A953775-5926-4512-AE7C-7393B2B945EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F7FEBE7-9C53-49B2-8F24-BD651A0E4A49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F7FEBE7-9C53-49B2-8F24-BD651A0E4A49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F7FEBE7-9C53-49B2-8F24-BD651A0E4A49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F7FEBE7-9C53-49B2-8F24-BD651A0E4A49}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B033F7F3-04F5-4E85-B02B-B7886F90EFF1}
+	EndGlobalSection
+EndGlobal
