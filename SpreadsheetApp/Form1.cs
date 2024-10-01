@@ -16,7 +16,7 @@ namespace SpreadsheetApp
         /// </summary>
         private void InitializeDataGrid()
         {
-            loadCells(dataGridView1, 10);
+            loadCells(dataGridView1, 50);
         }
 
         /// <summary>
