@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace SpreadsheetApp
+namespace SpreadsheetEngine
 {
     public abstract class Cell : INotifyPropertyChanged
     {
