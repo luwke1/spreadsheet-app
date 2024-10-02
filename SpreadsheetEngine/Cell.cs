@@ -17,8 +17,8 @@ namespace SpreadsheetApp
         {
             RowIndex = rowIndex;
             ColumnIndex = columnIndex;
-            text = string.Empty; // Initialize the text to an empty string
-            value = string.Empty; // Initialize the value to an empty string
+            text = string.Empty; 
+            value = string.Empty;
         }
 
         /// <summary>
@@ -32,8 +32,54 @@ namespace SpreadsheetApp
         public int ColumnIndex { get; }
 
         /// <summary>
+        /// Gets or sets the text of the cell.
+        /// </summary>
+        public string Text
+        {
+            get => text;
+            set
+            {
+                if (text == value)
+                {
+                    return;
+                }
+
+                text = value;
+                OnPropertyChanged("Text");
+
+                // Update the value if it's not a formula
+                if (!text.StartsWith("="))
+                    Value = text;
+                else
+                    Value = "";
+            }
+        }
+
+        /// <summary>
+        /// Gets the evaluated value of the cell.
+        /// </summary>
+        public string Value
+        {
+            get => value;
+            protected set // Making setter only possible internally
+            {
+                this.value = value;
+                OnPropertyChanged("Value");
+            }
+        }
+
+        /// <summary>
         /// Event triggered when a property value changes.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Method to raise the PropertyEvent event.
+        /// </summary>
+        /// <param name="propertyName">The name of the property that changed.</param>
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

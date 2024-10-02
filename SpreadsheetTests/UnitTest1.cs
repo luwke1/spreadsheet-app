@@ -19,7 +19,7 @@ namespace SpreadsheetApp
 
             form.loadCells(dataGridView, numberOfCells);
 
-            Assert.AreEqual(numberOfCells, dataGridView.Rows.Count-1, "Amount of rows not added properly");
+            Assert.That(dataGridView.Rows.Count-1, Is.EqualTo(numberOfCells), "Amount of rows not added properly");
         }
 
         // Boundary Case: Ensure no rows are added when amountOfCells is zero.
@@ -31,7 +31,7 @@ namespace SpreadsheetApp
 
             form.loadCells(dataGridView, 0);
 
-            Assert.AreEqual(0, dataGridView.Rows.Count, "No rows should be added when amountOfCells is 0.");
+            Assert.That(dataGridView.Rows.Count, Is.EqualTo(0), "No rows should be added when amountOfCells is 0.");
         }
 
         // Upper Boundary Case: Test with a large number of rows
@@ -45,7 +45,7 @@ namespace SpreadsheetApp
 
             form.loadCells(dataGridView, numberOfCells);
 
-            Assert.AreEqual(numberOfCells, dataGridView.Rows.Count - 1, "Incorrect number of rows added for a large number of cells.");
+            Assert.That(dataGridView.Rows.Count - 1, Is.EqualTo(numberOfCells), "Incorrect number of rows added for a large number of cells.");
         }
 
         // Error Case: Ensure that no rows are added and handle negative values.
@@ -57,7 +57,7 @@ namespace SpreadsheetApp
 
             form.loadCells(dataGridView, -5);
 
-            Assert.AreEqual(0, dataGridView.Rows.Count - 1, "No rows should be added when amountOfCells is negative.");
+            Assert.That(dataGridView.Rows.Count - 1, Is.EqualTo(0), "No rows should be added when amountOfCells is negative.");
         }
     }
 }
