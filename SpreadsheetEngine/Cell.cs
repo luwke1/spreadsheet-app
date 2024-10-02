@@ -39,19 +39,11 @@ namespace SpreadsheetApp
             get => text;
             set
             {
-                if (text == value)
+                if (text != value)
                 {
-                    return;
+                    text = value;
+                    OnPropertyChanged("Text");
                 }
-
-                text = value;
-                OnPropertyChanged("Text");
-
-                // Update the value if it's not a formula
-                if (!text.StartsWith("="))
-                    Value = text;
-                else
-                    Value = "";
             }
         }
 
@@ -61,10 +53,13 @@ namespace SpreadsheetApp
         public string Value
         {
             get => value;
-            protected set // Making setter only possible internally
+            internal set // Making setter only possible internally
             {
-                this.value = value;
-                OnPropertyChanged("Value");
+                if (this.value != value)
+                {
+                    this.value = value;
+                    OnPropertyChanged("Value");
+                }
             }
         }
 

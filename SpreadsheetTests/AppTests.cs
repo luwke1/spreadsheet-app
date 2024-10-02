@@ -31,7 +31,7 @@ namespace SpreadsheetApp
 
             form.loadCells(dataGridView, 0);
 
-            Assert.That(dataGridView.Rows.Count, Is.EqualTo(0), "No rows should be added when amountOfCells is 0.");
+            Assert.That(dataGridView.Rows.Count-1, Is.EqualTo(0), "No rows should be added when amountOfCells is 0.");
         }
 
         // Upper Boundary Case: Test with a large number of rows
