@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SpreadsheetApp\SpreadsheetApp.csproj" />
+    <ProjectReference Include="..\SpreadsheetEngine\SpreadsheetEngine.csproj" />
   </ItemGroup>
 
   <ItemGroup>
