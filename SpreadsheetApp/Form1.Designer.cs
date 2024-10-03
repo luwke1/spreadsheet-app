@@ -36,6 +36,7 @@
             E = new DataGridViewTextBoxColumn();
             F = new DataGridViewTextBoxColumn();
             G = new DataGridViewTextBoxColumn();
+            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -45,11 +46,10 @@
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { A, B, C, D, E, F, G });
-            dataGridView1.Dock = DockStyle.Fill;
             dataGridView1.Location = new Point(0, 0);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(800, 450);
+            dataGridView1.Size = new Size(759, 435);
             dataGridView1.TabIndex = 0;
             // 
             // A
@@ -101,11 +101,22 @@
             G.Name = "G";
             G.Width = 125;
             // 
+            // button1
+            // 
+            button1.Location = new Point(291, 435);
+            button1.Name = "button1";
+            button1.Size = new Size(172, 26);
+            button1.TabIndex = 1;
+            button1.Text = "Perform Demo";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(758, 462);
+            Controls.Add(button1);
             Controls.Add(dataGridView1);
             Name = "Form1";
             Text = "Form1";
@@ -123,5 +134,6 @@
         private DataGridViewTextBoxColumn E;
         private DataGridViewTextBoxColumn F;
         private DataGridViewTextBoxColumn G;
+        private Button button1;
     }
 }

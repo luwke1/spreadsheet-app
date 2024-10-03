@@ -73,10 +73,12 @@ namespace SpreadsheetEngine
             spreadsheet.GetCell(1, 1).Text = "(1,1)";
             spreadsheet.GetCell(2, 2).Text = "=B2";
 
-            Cell cell = spreadsheet.GetCell(2, 2);
+            Cell cell1 = spreadsheet.GetCell(1, 1);
+            Cell cell2 = spreadsheet.GetCell(2, 2);
 
-            Assert.IsNotNull(cell);
-            Assert.That(cell.Value, Is.EqualTo("(1,1)"));
+            Assert.IsNotNull(cell2);
+            Assert.That(cell1.Text, Is.EqualTo("(1,1)"));
+            Assert.That(cell2.Value, Is.EqualTo("(1,1)"));
         }
     }
 }

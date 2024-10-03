@@ -34,7 +34,7 @@ namespace SpreadsheetApp
 
             if (e.PropertyName == "Value")
             {
-                this.dataGridView1.Rows[cell.RowIndex + 1].Cells[cell.ColumnIndex + 1].Value = cell.Value;
+                this.dataGridView1.Rows[cell.RowIndex].Cells[cell.ColumnIndex].Value = cell.Value;
             }
         }
 
@@ -59,6 +59,18 @@ namespace SpreadsheetApp
             {
                 dataGrid.Rows.Add();
                 dataGrid.Rows[i - 1].HeaderCell.Value = i.ToString();
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            // Setting random cells
+            Random rand = new Random();
+            for (int i = 0; i < 50; i++)
+            {
+                int row = rand.Next(0, 50);
+                int column = rand.Next(0, 26);
+                this.spreadsheet.GetCell(row, column).Text = "Hello World!";
             }
         }
     }
