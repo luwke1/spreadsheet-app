@@ -35,6 +35,7 @@ namespace SpreadsheetEngine
             columnCount = columns;
             cells = new Cell[rows, columns];
 
+            // Loops to add cells and track their changes
             for (int i = 0; i < rows; i++) 
             {
                 for (int j = 0; j < columns; j++)
@@ -70,9 +71,13 @@ namespace SpreadsheetEngine
         {
             if (cell.Text.StartsWith("="))
             {
+                // Extracts the formula part of the text
                 string formula = cell.Text.Substring(1).Trim();
+
+                // Parses and evaluates the formula to get the extracted value
                 string? cellVal = ParseSimpleFormula(formula);
 
+                // Sets the current cell to the evaluated formula value
                 if (cellVal != null)
                 {
                     cell.Value = cellVal.ToString();
@@ -91,20 +96,24 @@ namespace SpreadsheetEngine
         /// <returns>The evaluated value returned from the formula.</returns>
         private string? ParseSimpleFormula(string formula)
         {
+            // Checks if it is a valid formula
             if (formula.Length < 2 || !char.IsLetter(formula[0]) || !char.IsDigit(formula[1]))
             {
                 throw new ArgumentException("Invalid formula format.");
             }
 
+            // Gets col and row index, zero based indexing
             int col = formula[0] - 'A';
             int row = Convert.ToInt32(formula.Substring(1).Trim()) - 1;
 
+            // Gets the cell and index location
             Cell cell = GetCell(row, col);
             if (cell == null)
             {
                 throw new InvalidOperationException("Cell not found."+ col + " " + row);
             }
 
+            // Returns the evaluated cells value as a string
             string cellVal = cell.Text.ToString();
             return cellVal;
         }
