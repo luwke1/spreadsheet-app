@@ -2,7 +2,7 @@ using System.Windows.Forms;
 
 namespace SpreadsheetApp
 {
-    public class Tests
+    public class AppTests
     {
         [SetUp]
         public void Setup()
@@ -17,7 +17,7 @@ namespace SpreadsheetApp
 
             int numberOfCells = 50;
 
-            form.loadCells(dataGridView, numberOfCells);
+            form.LoadCells(dataGridView, numberOfCells);
 
             Assert.That(dataGridView.Rows.Count-1, Is.EqualTo(numberOfCells), "Amount of rows not added properly");
         }
@@ -29,7 +29,7 @@ namespace SpreadsheetApp
             Form1 form = new Form1();
             DataGridView dataGridView = new DataGridView();
 
-            form.loadCells(dataGridView, 0);
+            form.LoadCells(dataGridView, 0);
 
             Assert.That(dataGridView.Rows.Count-1, Is.EqualTo(0), "No rows should be added when amountOfCells is 0.");
         }
@@ -43,7 +43,7 @@ namespace SpreadsheetApp
 
             int numberOfCells = 1000;
 
-            form.loadCells(dataGridView, numberOfCells);
+            form.LoadCells(dataGridView, numberOfCells);
 
             Assert.That(dataGridView.Rows.Count - 1, Is.EqualTo(numberOfCells), "Incorrect number of rows added for a large number of cells.");
         }
@@ -55,7 +55,7 @@ namespace SpreadsheetApp
             Form1 form = new Form1();
             DataGridView dataGridView = new DataGridView();
 
-            form.loadCells(dataGridView, -5);
+            form.LoadCells(dataGridView, -5);
 
             Assert.That(dataGridView.Rows.Count - 1, Is.EqualTo(0), "No rows should be added when amountOfCells is negative.");
         }

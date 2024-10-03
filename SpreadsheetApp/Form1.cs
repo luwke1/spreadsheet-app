@@ -1,14 +1,20 @@
 namespace SpreadsheetApp
 {
+    using SpreadsheetEngine;
+    using System.ComponentModel;
+    using System.Windows.Forms;
+
     public partial class Form1 : Form
     {
-        /// <summary>
-        /// Initializes a new instance of the Form1 class
-        /// </summary>
+        private Spreadsheet spreadsheet;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        // Initializes a new instance of the Form1 class
         public Form1()
         {
-            InitializeComponent();
-            InitializeDataGrid();
+            this.InitializeComponent();
+            this.InitializeDataGrid();
         }
 
         /// <summary>
@@ -16,7 +22,20 @@ namespace SpreadsheetApp
         /// </summary>
         private void InitializeDataGrid()
         {
-            loadCells(dataGridView1, 50);
+            this.spreadsheet = new Spreadsheet(50, 26);
+            this.LoadCells(this.dataGridView1, 50);
+            this.spreadsheet.CellPropertyChanged += Spreadsheet_CellPropertyChanged;
+        }
+
+        private void Spreadsheet_CellPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            Cell? cell = sender as Cell;
+            if (cell == null) { return; }
+
+            if (e.PropertyName == "Value")
+            {
+                this.dataGridView1.Rows[cell.RowIndex + 1].Cells[cell.ColumnIndex + 1].Value = cell.Value;
+            }
         }
 
         /// <summary>
@@ -24,20 +43,21 @@ namespace SpreadsheetApp
         /// </summary>
         /// <param name="dataGrid">The dataGridView object to be populated.</param>
         /// <param name="amountOfCells">The number of rows to add.</param>
-        public void loadCells(DataGridView dataGrid, int amountOfCells)
+        public void LoadCells(DataGridView dataGrid, int rows)
         {
             dataGrid.Rows.Clear();
+            dataGrid.Columns.Clear();
 
             // Make sure datGrid has a column
-            if (dataGrid.Columns.Count == 0)
+            for (char c = 'A'; c <= 'Z'; c++)
             {
-                dataGrid.Columns.Add("A", "A");
+                dataGrid.Columns.Add(c.ToString(), c.ToString());
             }
 
             // Add the amount of rows specified with amountOfCells param
-            for (int i = 1; i < amountOfCells + 1; i++)
+            for (int i = 1; i < rows + 1; i++)
             {
-                dataGrid.Rows.Add("");
+                dataGrid.Rows.Add();
                 dataGrid.Rows[i - 1].HeaderCell.Value = i.ToString();
             }
         }

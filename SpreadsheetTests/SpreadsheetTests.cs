@@ -2,7 +2,7 @@ using System.Windows.Forms;
 
 namespace SpreadsheetEngine
 {
-    public class CellTests
+    public class SpreadsheetTests
     {
         [SetUp]
         public void Setup()
@@ -39,6 +39,44 @@ namespace SpreadsheetEngine
             Assert.Throws<ArgumentException>(() => new Spreadsheet(0, 5));
             Assert.Throws<ArgumentException>(() => new Spreadsheet(5, 0));
             Assert.Throws<ArgumentException>(() => new Spreadsheet(1, 27));
+        }
+
+        [Test]
+        public void CheckBlankCell()
+        {
+            Spreadsheet spreadsheet = new Spreadsheet(3, 3);
+
+            Cell cell = spreadsheet.GetCell(1, 1);
+
+            Assert.IsNotNull(cell);
+            Assert.That(cell.RowIndex, Is.EqualTo(1));
+            Assert.That(cell.ColumnIndex, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void CheckProperText()
+        {
+            Spreadsheet spreadsheet = new Spreadsheet(3, 3);
+
+            spreadsheet.GetCell(1, 1).Text = "TEST";
+            Cell cell = spreadsheet.GetCell(1, 1);
+
+            Assert.IsNotNull(cell);
+            Assert.That(cell.Text, Is.EqualTo("TEST"));
+        }
+
+        [Test]
+        public void CheckProperValue()
+        {
+            Spreadsheet spreadsheet = new Spreadsheet(3, 3);
+
+            spreadsheet.GetCell(1, 1).Text = "(1,1)";
+            spreadsheet.GetCell(2, 2).Text = "=B2";
+
+            Cell cell = spreadsheet.GetCell(2, 2);
+
+            Assert.IsNotNull(cell);
+            Assert.That(cell.Value, Is.EqualTo("(1,1)"));
         }
     }
 }

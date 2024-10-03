@@ -71,9 +71,9 @@ namespace SpreadsheetEngine
             if (cell.Text.StartsWith("="))
             {
                 string formula = cell.Text.Substring(1).Trim();
-                int? cellVal = ParseSimpleFormula(formula);
+                string? cellVal = ParseSimpleFormula(formula);
 
-                if (cellVal.HasValue && cellVal != null)
+                if (cellVal != null)
                 {
                     cell.Value = cellVal.ToString();
                 }
@@ -84,7 +84,12 @@ namespace SpreadsheetEngine
             }
         }
 
-        private int? ParseSimpleFormula(string formula)
+        /// <summary>
+        /// Parses a formula and returns the evaluated formula
+        /// </summary>
+        /// <param name="formula">Hte formula to be evaluated.</param>
+        /// <returns>The evaluated value returned from the formula.</returns>
+        private string? ParseSimpleFormula(string formula)
         {
             if (formula.Length < 2 || !char.IsLetter(formula[0]) || !char.IsDigit(formula[1]))
             {
@@ -92,7 +97,7 @@ namespace SpreadsheetEngine
             }
 
             int col = formula[0] - 'A';
-            int row = Convert.ToInt32(formula.Substring(1));
+            int row = Convert.ToInt32(formula.Substring(1)) - 1;
 
             Cell cell = GetCell(col, row);
             if (cell == null)
@@ -100,7 +105,7 @@ namespace SpreadsheetEngine
                 throw new InvalidOperationException("Cell not found.");
             }
 
-            int cellVal = Convert.ToInt32(cell.Value);
+            string cellVal = cell.Value.ToString();
             return cellVal;
         }
 
