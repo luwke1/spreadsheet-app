@@ -97,15 +97,15 @@ namespace SpreadsheetEngine
             }
 
             int col = formula[0] - 'A';
-            int row = Convert.ToInt32(formula.Substring(1)) - 1;
+            int row = Convert.ToInt32(formula.Substring(1).Trim()) - 1;
 
-            Cell cell = GetCell(col, row);
+            Cell cell = GetCell(row, col);
             if (cell == null)
             {
-                throw new InvalidOperationException("Cell not found.");
+                throw new InvalidOperationException("Cell not found."+ col + " " + row);
             }
 
-            string cellVal = cell.Value.ToString();
+            string cellVal = cell.Text.ToString();
             return cellVal;
         }
 
