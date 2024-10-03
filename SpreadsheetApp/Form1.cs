@@ -54,7 +54,7 @@ namespace SpreadsheetApp
                 dataGrid.Columns.Add(c.ToString(), c.ToString());
             }
 
-            // Add the amount of rows specified with amountOfCells param
+            // Add the amount of rows specified with amountOfCells param 
             for (int i = 1; i < rows + 1; i++)
             {
                 dataGrid.Rows.Add();
