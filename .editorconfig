@@ -1,0 +1,28 @@
+﻿[*.cs]
+
+# CS8618: Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+dotnet_diagnostic.CS8618.severity = none
+
+# SA1202: Elements should be ordered by access
+dotnet_diagnostic.SA1202.severity = none
+
+# CA1822: Mark members as static
+dotnet_diagnostic.CA1822.severity = none
+
+# CS8622: Nullability of reference types in type of parameter doesn't match the target delegate (possibly because of nullability attributes).
+dotnet_diagnostic.CS8622.severity = none
+
+# SA1101: Prefix local calls with this
+dotnet_diagnostic.SA1101.severity = none
+
+# SA1300: Element should begin with upper-case letter
+dotnet_diagnostic.SA1300.severity = none
+
+# IDE1006: Naming Styles
+dotnet_diagnostic.IDE1006.severity = none
+
+# CS8612: Nullability of reference types in type doesn't match implicitly implemented member.
+dotnet_diagnostic.CS8612.severity = none
+
+# CS8603: Possible null reference return.
+dotnet_diagnostic.CS8603.severity = none
