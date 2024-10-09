@@ -15,6 +15,12 @@ namespace SpreadsheetEngine
         private Node left;
         private Node right;
 
+        /// <summary>
+        /// Initializes a new instance of the OperatorNode class with the specified operator character.
+        /// </summary>
+        /// <param name="operatorChar">The operator character.</param>
+        /// <param name="left">The left child node.</param>
+        /// <param name="right">The right child node.</param>
         public OperatorNode(char opChar, Node left, Node right)
         {
             this.opChar = opChar;
@@ -24,9 +30,11 @@ namespace SpreadsheetEngine
 
         public override double Evaluate(Dictionary<string, double> variables)
         {
+            // Evaluates the left and right child nodes
             double leftVal = this.left.Evaluate(variables);
             double rightVal = this.right.Evaluate(variables);
 
+            // Returns the outcome from combing operator and child nodes
             switch (opChar)
             {
                 case '+':

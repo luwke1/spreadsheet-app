@@ -13,6 +13,10 @@ namespace SpreadsheetEngine
     {
         private string name;
 
+        /// <summary>
+        /// Initializes a new instance of the VariableNode class with a variable name.
+        /// </summary>
+        /// <param name="name">The name of the variable.</param>
         public VariableNode(string name, double value=0.0)
         {
             this.name = name;
@@ -20,6 +24,7 @@ namespace SpreadsheetEngine
 
         public override double Evaluate(Dictionary<string, double> variables)
         {
+            // Returns the value associated with the VariableNodes name
             if (variables != null && variables.ContainsKey(this.name))
             {
                 return variables[this.name];

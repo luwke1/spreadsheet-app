@@ -13,6 +13,10 @@ namespace SpreadsheetEngine
     {
         private double value;
 
+        /// <summary>
+        /// Initializes a new instance of the ConstantNode class.
+        /// </summary>
+        /// <param name="value">The constant value.</param>
         public ConstantNode(double value)
         {
             this.value = value;

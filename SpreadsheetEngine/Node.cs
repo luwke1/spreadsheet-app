@@ -11,6 +11,11 @@ namespace SpreadsheetEngine
     /// </summary>
     internal abstract class Node
     {
+        /// <summary>
+        /// Abstract method for evaluating the node and returns its numerical value.
+        /// </summary>
+        /// <param name="variables">Dictionary of variable values.</param>
+        /// <returns>Evaluated value.</returns>
         public abstract double Evaluate(Dictionary<string, double> variables);
     }
 }

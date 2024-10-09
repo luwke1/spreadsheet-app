@@ -8,16 +8,8 @@ namespace SpreadsheetEngine
 {
     public class ExpressionTree
     {
-
-        private class Node
-        {
-
-        }
-
-        private class OperatorNode : Node
-        {
-
-        }
+        private Dictionary<string, double> variables = new Dictionary<string, double>();
+        private Node root;
 
         public ExpressionTree(string expression) 
         {
