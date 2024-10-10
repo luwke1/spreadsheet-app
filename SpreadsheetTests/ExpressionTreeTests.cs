@@ -10,7 +10,7 @@ namespace SpreadsheetEngine
     public class ExpressionTreeTests
     {
         [Test]
-        public void EvaluateExpression_Normal()
+        public void EvaluateExpression_Add()
         {
             string expression = "5+10";
             ExpressionTree tree = new ExpressionTree(expression);
@@ -18,6 +18,39 @@ namespace SpreadsheetEngine
             double result = tree.Evaluate();
 
             Assert.That(result, Is.EqualTo(15.0));
+        }
+
+        [Test]
+        public void EvaluateExpression_Division()
+        {
+            string expression = "10/5";
+            ExpressionTree tree = new ExpressionTree(expression);
+
+            double result = tree.Evaluate();
+
+            Assert.That(result, Is.EqualTo(2.0));
+        }
+
+        [Test]
+        public void EvaluateExpression_Subtract()
+        {
+            string expression = "10-5";
+            ExpressionTree tree = new ExpressionTree(expression);
+
+            double result = tree.Evaluate();
+
+            Assert.That(result, Is.EqualTo(5.0));
+        }
+
+        [Test]
+        public void EvaluateExpression_Multiply()
+        {
+            string expression = "10*5";
+            ExpressionTree tree = new ExpressionTree(expression);
+
+            double result = tree.Evaluate();
+
+            Assert.That(result, Is.EqualTo(50.0));
         }
 
         [Test]
@@ -44,10 +77,10 @@ namespace SpreadsheetEngine
         [Test]
         public void EvaluateEmptyVariable()
         {
-            string expression = "X1+5";
+            string expression = "X1-5";
             ExpressionTree tree = new ExpressionTree(expression);
             double result = tree.Evaluate();
-            Assert.That(result, Is.EqualTo(5.0));
+            Assert.That(result, Is.EqualTo(-5.0));
         }
     }
 }

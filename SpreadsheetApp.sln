@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpreadsheetEngine", "Spread
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpressionTreeDemoApp", "ExpressionTreeDemoApp\ExpressionTreeDemoApp.csproj", "{1CDE99F3-54E7-4163-95AB-098D50381BE9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F27569DC-45C9-46F9-9678-8FBB45409B47}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{137FF559-D10D-4C9E-A773-D3F055F57181}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
