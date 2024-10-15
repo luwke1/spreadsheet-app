@@ -36,7 +36,7 @@ namespace SpreadsheetApp
         {
             this.spreadsheet = new Spreadsheet(50, 26);
             this.LoadCells(this.dataGridView1, 50);
-            this.spreadsheet.CellPropertyChanged += Spreadsheet_CellPropertyChanged;
+            this.spreadsheet.CellPropertyChanged += this.Spreadsheet_CellPropertyChanged;
         }
 
         private void Spreadsheet_CellPropertyChanged(object sender, PropertyChangedEventArgs e)
