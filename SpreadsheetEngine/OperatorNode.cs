@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace SpreadsheetEngine
 {
     /// <summary>
-    /// Class for a node that calculates an operation.
+    /// Abstract class for a node that calculates an operation.
     /// </summary>
-    internal class OperatorNode : Node
+    internal abstract class OperatorNode : Node
     {
-        private char opChar;
-        private Node left;
-        private Node right;
+        protected char opChar;
+        protected Node left;
+        protected Node right;
 
         /// <summary>
         /// Initializes a new instance of the OperatorNode class with the specified operator character.
@@ -28,26 +28,11 @@ namespace SpreadsheetEngine
             this.right = right;
         }
 
-        public override double Evaluate(Dictionary<string, double> variables)
-        {
-            // Evaluates the left and right child nodes
-            double leftVal = this.left.Evaluate(variables);
-            double rightVal = this.right.Evaluate(variables);
-
-            // Returns the outcome from combing operator and child nodes
-            switch (opChar)
-            {
-                case '+':
-                    return leftVal + rightVal;
-                case '-':
-                    return leftVal - rightVal;
-                case '*':
-                    return leftVal * rightVal;
-                case '/':
-                    return leftVal / rightVal;
-                default:
-                    throw new Exception("Invalid operator");
-            }
-        }
+        /// <summary>
+        /// Abstract method for evaluating the operation of the node.
+        /// </summary>
+        /// <param name="variables">Dictionary of variable values.</param>
+        /// <returns>Evaluated value.</returns>
+        public abstract override double Evaluate(Dictionary<string, double> variables);
     }
 }

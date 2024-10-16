@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SpreadsheetEngine
@@ -13,6 +14,7 @@ namespace SpreadsheetEngine
     {
         private Dictionary<string, double> variables = new Dictionary<string, double>();
         private Node root;
+        private OperatorNodeFactory operatorNodeFactory = new OperatorNodeFactory();
 
         /// <summary>
         /// Initializes an ExpressionTree.
@@ -20,7 +22,7 @@ namespace SpreadsheetEngine
         /// <param name="expression">The expression to be built.</param>
         public ExpressionTree(string expression) 
         {
-            root = BuildTree(expression);
+            this.root = BuildTree(expression);
             this.Expression = expression;
         }
 
@@ -37,46 +39,28 @@ namespace SpreadsheetEngine
                 return null;
             }
 
-            // Finds which operator is used in the expression string
-            char[] operators = { '+', '-', '*', '/'};
-            char operChar = '\0';
-            foreach (char oper in operators)
+            Queue<string> tokens = Tokenize(expression);
+
+            return root;
+        }
+
+        /// <summary>
+        /// Tokenizes the input expression using regex.
+        /// </summary>
+        /// <param name="expression">The expression to be tokenized.</param>
+        /// <returns>A queue of tokens representing the expression.</returns>
+        public Queue<string> Tokenize(string expression)
+        {
+            var tokens = new Queue<string>();
+            var pattern = @"(\d+\.?\d*|[A-Z]\d+|[\+\-\*/\(\)])";
+            var matches = Regex.Matches(expression, pattern);
+
+            foreach (Match match in matches)
             {
-                if (expression.Contains(oper))
-                {
-                    operChar = oper;
-                }
+                tokens.Enqueue(match.Value);
             }
 
-            // If no operator, then the expression is a single variable or constant
-            if (operChar == '\0')
-            {
-                // Return a constant node with the double value, otherwise return the variable node
-                if (Double.TryParse(expression, out double value))
-                {
-                    return new ConstantNode(value);
-                }
-                else
-                {
-                    return new VariableNode(expression);
-                }
-            }
-            else
-            {
-                // Get first index of operator
-                int operIndex = expression.IndexOf(operChar);
-
-                // Split the expression at first operator index, saving left and right
-                string leftExpression = expression.Substring(0, operIndex);
-                string rightExpression = expression.Substring(operIndex + 1);
-
-                // Build an expression tree for left and right expressions recursively
-                Node nodeLeft = BuildTree(leftExpression);
-                Node nodeRight = BuildTree(rightExpression);
-
-                // Return the new tree with left and right child trees
-                return new OperatorNode(operChar, nodeLeft, nodeRight);
-            }
+            return tokens;
         }
 
         public string Expression { get; set; }
