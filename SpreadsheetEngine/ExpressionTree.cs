@@ -63,6 +63,86 @@ namespace SpreadsheetEngine
             return tokens;
         }
 
+        /// <summary>
+        /// Converts the tokens to postfix notation
+        /// </summary>
+        /// <param name="tokens">The queue of tokens representing the expression.</param>
+        /// <returns>A queue of tokens representing the expression in postfix notation.</returns>
+        public Queue<string> ConvertToPostfix(Queue<string> tokens)
+        {
+            var outputQueue = new Queue<string>();
+            var operatorStack = new Stack<string>();
+
+            while (tokens.Count > 0)
+            {
+                string token = tokens.Dequeue();
+
+                if (token == "(")
+                {
+                    operatorStack.Push(token);
+                }
+                else if (token == ")")
+                {
+                    // Loop while stack is not empty and the current item in stack is not an open parenthesis
+                    while (operatorStack.Count > 0 && operatorStack.Peek() != "(")
+                    {
+                        outputQueue.Enqueue(operatorStack.Pop());
+                    }
+
+                    // Pop the left parenthesis if stack is not empty
+                    if (operatorStack.Count > 0)
+                    {
+                        operatorStack.Pop(); // remove "(" from the stack
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("invalid equation");
+                    }
+                }
+                else if (IsOperator(token))
+                {
+                    // Handle operator precedence
+                    while (operatorStack.Count > 0 && IsOperator(operatorStack.Peek()) && Precedence(operatorStack.Peek()) >= Precedence(token))
+                    {
+                        outputQueue.Enqueue(operatorStack.Pop());
+                    }
+                    operatorStack.Push(token);
+                }
+                else
+                {
+                    outputQueue.Enqueue(token);
+                }
+            }
+
+            // Pop the remaining operators onto the output queue
+            while (operatorStack.Count > 0)
+            {
+                outputQueue.Enqueue(operatorStack.Pop());
+            }
+
+            return outputQueue;
+        }
+
+        /// <summary>
+        /// Checks if the token is an operator.
+        /// </summary>
+        /// <param name="token">The token to check.</param>
+        /// <returns>True if the token is an operator, false otherwise.</returns>
+        private bool IsOperator(string token)
+        {
+            return token == "+" || token == "-" || token == "*" || token == "/";
+        }
+
+        /// <summary>
+        /// Returns the precedence of the operator.
+        /// </summary>
+        /// <param name="op">The operator to check precedence value.</param>
+        /// <returns>The precedence value of the operator.</returns>
+        private int Precedence(string op)
+        {
+            return op == "+" || op == "-" ? 1 : 2;
+        }
+
         public string Expression { get; set; }
 
         /// <summary>
