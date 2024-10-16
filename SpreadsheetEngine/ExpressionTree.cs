@@ -41,7 +41,10 @@ namespace SpreadsheetEngine
 
             Queue<string> tokens = Tokenize(expression);
 
-            return root;
+            // Converts tokens into the postfix notation
+            Queue<string> postfixTokens = ConvertToPostfix(tokens);
+
+            return BuildTreeFromPostfix(postfixTokens);
         }
 
         /// <summary>
@@ -121,6 +124,40 @@ namespace SpreadsheetEngine
             }
 
             return outputQueue;
+        }
+
+        /// <summary>
+        /// Builds an expression tree from postfix notation queue.
+        /// </summary>
+        /// <param name="postfixTokens">A queue of tokens representing the expression in postfix notation.</param>
+        /// <returns>The root node of the expression tree.</returns>
+        private Node BuildTreeFromPostfix(Queue<string> postfixTokens)
+        {
+            var stack = new Stack<Node>();
+
+            while (postfixTokens.Count > 0)
+            {
+                string token = postfixTokens.Dequeue();
+
+                if (double.TryParse(token, out double number))
+                {
+                    stack.Push(new ConstantNode(number));
+                }
+                else if (IsOperator(token))
+                {
+                    // Pop two nodes from the stack and make an operator node from them
+                    var right = stack.Pop();
+                    var left = stack.Pop();
+                    var operatorNode = operatorNodeFactory.CreateOperatorNode(token, left, right);
+                    stack.Push(operatorNode);
+                }
+                else
+                {
+                    stack.Push(new VariableNode(token));
+                }
+            }
+
+            return stack.Pop();
         }
 
         /// <summary>
