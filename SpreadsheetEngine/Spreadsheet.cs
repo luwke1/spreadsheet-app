@@ -114,7 +114,7 @@ namespace SpreadsheetEngine
             }
 
             // Returns the evaluated cells value as a string
-            string cellVal = cell.Text.ToString();
+            string cellVal = cell.Value.ToString();
             return cellVal;
         }
 

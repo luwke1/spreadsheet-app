@@ -87,20 +87,13 @@ namespace SpreadsheetEngine
                 else if (token == ")")
                 {
                     // Loop while stack is not empty and the current item in stack is not an open parenthesis
-                    while (operatorStack.Count > 0 && operatorStack.Peek() != "(")
+                    while (operatorStack.Peek() != "(")
                     {
                         outputQueue.Enqueue(operatorStack.Pop());
                     }
 
-                    // Pop the left parenthesis if stack is not empty
-                    if (operatorStack.Count > 0)
-                    {
-                        operatorStack.Pop(); // remove "(" from the stack
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("invalid equation");
-                    }
+                    // pop the left parenthesis
+                    operatorStack.Pop();
                 }
                 else if (IsOperator(token))
                 {
