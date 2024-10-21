@@ -55,10 +55,7 @@ namespace SpreadsheetEngine
             Cell cell = (Cell)sender;
             if (cell == null) { return; }
 
-            if (e.PropertyName == "Text")
-            {
-                UpdateCellValue(cell);
-            }
+            UpdateCellValue(cell);
 
             CellPropertyChanged?.Invoke(sender, e);
         }
@@ -74,14 +71,10 @@ namespace SpreadsheetEngine
                 // Extracts the formula part of the text
                 string formula = cell.Text.Substring(1).Trim();
 
-                // Parses and evaluates the formula to get the extracted value
-                string? cellVal = ParseSimpleFormula(formula);
+                // Creates an expression tree
+                ExpressionTree expTree = new ExpressionTree(formula, this);
 
-                // Sets the current cell to the evaluated formula value
-                if (cellVal != null)
-                {
-                    cell.Value = cellVal.ToString();
-                }
+                cell.Value = expTree.Evaluate();
           
             }else
             {
@@ -94,8 +87,9 @@ namespace SpreadsheetEngine
         /// </summary>
         /// <param name="formula">Hte formula to be evaluated.</param>
         /// <returns>The evaluated value returned from the formula.</returns>
-        private string? ParseSimpleFormula(string formula)
+        public string? GetCellValue(string formula)
         {
+            Console.WriteLine(formula);
             // Checks if it is a valid formula
             if (formula.Length < 2 || !char.IsLetter(formula[0]) || !char.IsDigit(formula[1]))
             {

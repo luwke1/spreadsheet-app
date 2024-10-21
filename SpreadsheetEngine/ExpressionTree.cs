@@ -15,15 +15,17 @@ namespace SpreadsheetEngine
         private Dictionary<string, double> variables = new Dictionary<string, double>();
         private Node root;
         private OperatorNodeFactory operatorNodeFactory = new OperatorNodeFactory();
+        private Spreadsheet spreadsheet;
 
         /// <summary>
         /// Initializes an ExpressionTree.
         /// </summary>
         /// <param name="expression">The expression to be built.</param>
-        public ExpressionTree(string expression) 
+        public ExpressionTree(string expression, Spreadsheet spreadsheetMain) 
         {
             this.root = BuildTree(expression);
             this.Expression = expression;
+            this.spreadsheet = spreadsheetMain;
         }
 
         /// <summary>
@@ -146,6 +148,7 @@ namespace SpreadsheetEngine
                 }
                 else
                 {
+                    this.variables.Add(token, 0);
                     stack.Push(new VariableNode(token));
                 }
             }
@@ -189,9 +192,22 @@ namespace SpreadsheetEngine
         /// Evaluates the expression tree from the root, returns its value
         /// </summary>
         /// <returns>The evaluated value of the expression tree</returns>
-        public double Evaluate()
+        public string Evaluate()
         {
-            return root.Evaluate(this.variables);
+            foreach (string key in this.variables.Keys)
+            {
+                double value;
+                if (double.TryParse(this.spreadsheet.GetCellValue(key), out value))
+                {
+                    this.variables[key] = value;
+                }
+                else
+                {
+                    return "ERROR";
+                }   
+            }
+
+            return root.Evaluate(this.variables).ToString();
         }
     }
 }
