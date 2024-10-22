@@ -4,81 +4,122 @@ namespace SpreadsheetEngine
 {
     public class SpreadsheetTests
     {
-        [SetUp]
-        public void Setup()
+        [Test]
+        public void TestSpreadsheet_NormalCase()
         {
+            Spreadsheet sheet = new Spreadsheet(5, 5);
+            Assert.That(sheet.RowCount, Is.EqualTo(5));
+            Assert.That(sheet.ColumnCount, Is.EqualTo(5));
+
+            var cell = sheet.GetCell(1, 1);
+            Assert.That(cell, Is.Not.Null);
+            Assert.That(cell.Text, Is.EqualTo(""));
         }
 
         [Test]
-        public void LoadSpreadsheet_Boundary()
+        public void TestSpreadsheet_FormulaEvaluation()
         {
-            int rows = 1;
-            int columns = 1;
+            Spreadsheet sheet = new Spreadsheet(5, 5);
+            var cellA1 = sheet.GetCell(0, 0);
+            var cellA2 = sheet.GetCell(1, 0);
+            cellA1.Text = "5";
+            cellA2.Text = "=A1+5";
 
-            Spreadsheet spreadsheet = new Spreadsheet(rows, columns);
-
-            Assert.That(spreadsheet.RowCount, Is.EqualTo(1));
-            Assert.That(spreadsheet.ColumnCount, Is.EqualTo(1));
+            Assert.That(cellA2.Value, Is.EqualTo("10"));
         }
 
         [Test]
-        public void LoadSpreadsheet_Normal()
+        public void TestSpreadsheet_SetTextInEmptyCell()
         {
-            int rows = 10;
-            int columns = 5;
-
-            Spreadsheet spreadsheet = new Spreadsheet(rows, columns);
-
-            Assert.That(spreadsheet.RowCount, Is.EqualTo(rows));
-            Assert.That(spreadsheet.ColumnCount, Is.EqualTo(columns));
+            Spreadsheet sheet = new Spreadsheet(3, 3);
+            var cell = sheet.GetCell(0, 0);
+            cell.Text = "Hello";
+            Assert.That(cell.Value, Is.EqualTo("Hello"));
         }
 
         [Test]
-        public void LoadSpreadsheet_Error()
+        public void TestSpreadsheet_OutOfBoundsAccess()
         {
-            Assert.Throws<ArgumentException>(() => new Spreadsheet(0, 5));
-            Assert.Throws<ArgumentException>(() => new Spreadsheet(5, 0));
-            Assert.Throws<ArgumentException>(() => new Spreadsheet(1, 27));
+            Spreadsheet sheet = new Spreadsheet(5, 5);
+            Assert.That(sheet.GetCell(6, 1), Is.Null);
+            Assert.That(sheet.GetCell(1, 6), Is.Null);
         }
 
         [Test]
-        public void CheckBlankCell()
+        public void TestSpreadsheet_DependentCellUpdate()
         {
-            Spreadsheet spreadsheet = new Spreadsheet(3, 3);
+            Spreadsheet sheet = new Spreadsheet(3, 3);
+            var cellA1 = sheet.GetCell(0, 0);
+            var cellA2 = sheet.GetCell(1, 0);
+            cellA1.Text = "10";
+            cellA2.Text = "=A1+5";
 
-            Cell cell = spreadsheet.GetCell(1, 1);
+            Assert.That(cellA2.Value, Is.EqualTo("15"));
 
-            Assert.IsNotNull(cell);
-            Assert.That(cell.RowIndex, Is.EqualTo(1));
-            Assert.That(cell.ColumnIndex, Is.EqualTo(1));
+            cellA1.Text = "20";
+            Assert.That(cellA2.Value, Is.EqualTo("25"));
         }
 
         [Test]
-        public void CheckProperText()
+        public void TestSpreadsheet_EmptyCellCase()
         {
-            Spreadsheet spreadsheet = new Spreadsheet(3, 3);
-
-            spreadsheet.GetCell(1, 1).Text = "TEST";
-            Cell cell = spreadsheet.GetCell(1, 1);
-
-            Assert.IsNotNull(cell);
-            Assert.That(cell.Text, Is.EqualTo("TEST"));
+            Spreadsheet sheet = new Spreadsheet(5, 5);
+            var cell = sheet.GetCell(2, 2);
+            Assert.That(cell.Value, Is.EqualTo(""));
         }
 
         [Test]
-        public void CheckProperValue()
+        public void TestSpreadsheet_BadFormula()
         {
-            Spreadsheet spreadsheet = new Spreadsheet(3, 3);
+            Spreadsheet sheet = new Spreadsheet(3, 3);
+            var cell = sheet.GetCell(0, 0); // A1
+            cell.Text = "=A1**+523";
 
-            spreadsheet.GetCell(1, 1).Text = "(1,1)";
-            spreadsheet.GetCell(2, 2).Text = "=B2";
+            Assert.That(cell.Value, Is.EqualTo("ERROR"));
+        }
 
-            Cell cell1 = spreadsheet.GetCell(1, 1);
-            Cell cell2 = spreadsheet.GetCell(2, 2);
+        [Test]
+        public void TestSpreadsheet_BadReference()
+        {
+            Spreadsheet sheet = new Spreadsheet(3, 3);
+            var cell = sheet.GetCell(0, 0);
+            cell.Text = "=A9999";
 
-            Assert.IsNotNull(cell2);
-            Assert.That(cell1.Text, Is.EqualTo("(1,1)"));
-            Assert.That(cell2.Value, Is.EqualTo("(1,1)"));
+            Assert.That(cell.Value, Is.EqualTo("ERROR"));
+        }
+
+        [Test]
+        public void TestSpreadsheet_CircularReference()
+        {
+            Spreadsheet sheet = new Spreadsheet(5, 5);
+            var cellA1 = sheet.GetCell(0, 0);
+            var cellA2 = sheet.GetCell(1, 0);
+
+            cellA1.Text = "=A2";
+            cellA2.Text = "=A1";
+
+            Assert.That(cellA1.Value, Is.EqualTo("ERROR"));
+            Assert.That(cellA2.Value, Is.EqualTo("ERROR"));
+        }
+
+        [Test]
+        public void TestSpreadsheet_DependencyChange()
+        {
+            Spreadsheet sheet = new Spreadsheet(5, 5);
+            var cellB1 = sheet.GetCell(0, 1);
+            var cellA1 = sheet.GetCell(0, 0);
+            var cellA2 = sheet.GetCell(1, 0);
+
+            cellB1.Text = "20";
+            cellA1.Text = "=B1+5";
+            cellA2.Text = "=A1+2";
+
+            Assert.That(cellA1.Value, Is.EqualTo("25"));
+            Assert.That(cellA2.Value, Is.EqualTo("27"));
+
+            cellB1.Text = "30";
+            Assert.That(cellA1.Value, Is.EqualTo("35"));
+            Assert.That(cellA2.Value, Is.EqualTo("37"));
         }
     }
 }

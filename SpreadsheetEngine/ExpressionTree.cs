@@ -17,6 +17,11 @@ namespace SpreadsheetEngine
         private OperatorNodeFactory operatorNodeFactory = new OperatorNodeFactory();
         private Spreadsheet spreadsheet;
 
+        public List<string> Variables
+        {
+            get { return variables.Keys.ToList(); }
+        }
+
         /// <summary>
         /// Initializes an ExpressionTree.
         /// </summary>
@@ -140,6 +145,8 @@ namespace SpreadsheetEngine
                 }
                 else if (IsOperator(token))
                 {
+                    if (stack.Count < 2) return null;
+
                     // Pop two nodes from the stack and make an operator node from them
                     var right = stack.Pop();
                     var left = stack.Pop();
@@ -176,6 +183,7 @@ namespace SpreadsheetEngine
             return op == "+" || op == "-" ? 1 : 2;
         }
 
+
         public string Expression { get; set; }
 
         /// <summary>
@@ -194,6 +202,11 @@ namespace SpreadsheetEngine
         /// <returns>The evaluated value of the expression tree</returns>
         public string Evaluate()
         {
+            if (root == null)
+            {
+                return "ERROR";
+            }
+
             foreach (string key in this.variables.Keys)
             {
                 double value;

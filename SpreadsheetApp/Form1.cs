@@ -50,10 +50,9 @@ namespace SpreadsheetApp
                 return;
             }
 
-            if (e.PropertyName == "Value")
-            {
-                this.dataGridView1.Rows[cell.RowIndex].Cells[cell.ColumnIndex].Value = cell.Value;
-            }
+
+            this.dataGridView1.Rows[cell.RowIndex].Cells[cell.ColumnIndex].Value = cell.Value;
+        
         }
 
         private void dataGridView1_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
