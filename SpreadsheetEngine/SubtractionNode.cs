@@ -17,7 +17,7 @@ namespace SpreadsheetEngine
         /// <param name="left">The left child node.</param>
         /// <param name="right">The right child node.</param>
         public SubtractionNode(Node left, Node right)
-            : base('-', left, right)
+            : base('-', left, right, 1)
         {
         }
 

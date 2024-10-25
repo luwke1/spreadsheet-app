@@ -15,15 +15,22 @@ namespace SpreadsheetEngine
         private Dictionary<string, double> variables = new Dictionary<string, double>();
         private Node root;
         private OperatorNodeFactory operatorNodeFactory = new OperatorNodeFactory();
+        private Spreadsheet spreadsheet;
+
+        public List<string> Variables
+        {
+            get { return variables.Keys.ToList(); }
+        }
 
         /// <summary>
         /// Initializes an ExpressionTree.
         /// </summary>
         /// <param name="expression">The expression to be built.</param>
-        public ExpressionTree(string expression) 
+        public ExpressionTree(string expression, Spreadsheet spreadsheetMain) 
         {
             this.root = BuildTree(expression);
             this.Expression = expression;
+            this.spreadsheet = spreadsheetMain;
         }
 
         /// <summary>
@@ -87,20 +94,13 @@ namespace SpreadsheetEngine
                 else if (token == ")")
                 {
                     // Loop while stack is not empty and the current item in stack is not an open parenthesis
-                    while (operatorStack.Count > 0 && operatorStack.Peek() != "(")
+                    while (operatorStack.Peek() != "(")
                     {
                         outputQueue.Enqueue(operatorStack.Pop());
                     }
 
-                    // Pop the left parenthesis if stack is not empty
-                    if (operatorStack.Count > 0)
-                    {
-                        operatorStack.Pop(); // remove "(" from the stack
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("invalid equation");
-                    }
+                    // pop the left parenthesis
+                    operatorStack.Pop();
                 }
                 else if (IsOperator(token))
                 {
@@ -145,6 +145,8 @@ namespace SpreadsheetEngine
                 }
                 else if (IsOperator(token))
                 {
+                    if (stack.Count < 2) return null;
+
                     // Pop two nodes from the stack and make an operator node from them
                     var right = stack.Pop();
                     var left = stack.Pop();
@@ -153,6 +155,7 @@ namespace SpreadsheetEngine
                 }
                 else
                 {
+                    this.variables.Add(token, 0);
                     stack.Push(new VariableNode(token));
                 }
             }
@@ -180,6 +183,7 @@ namespace SpreadsheetEngine
             return op == "+" || op == "-" ? 1 : 2;
         }
 
+
         public string Expression { get; set; }
 
         /// <summary>
@@ -196,9 +200,27 @@ namespace SpreadsheetEngine
         /// Evaluates the expression tree from the root, returns its value
         /// </summary>
         /// <returns>The evaluated value of the expression tree</returns>
-        public double Evaluate()
+        public string Evaluate()
         {
-            return root.Evaluate(this.variables);
+            if (root == null)
+            {
+                return "ERROR";
+            }
+
+            foreach (string key in this.variables.Keys)
+            {
+                double value;
+                if (double.TryParse(this.spreadsheet.GetCellValue(key), out value))
+                {
+                    this.variables[key] = value;
+                }
+                else
+                {
+                    return "ERROR";
+                }   
+            }
+
+            return root.Evaluate(this.variables).ToString();
         }
     }
 }

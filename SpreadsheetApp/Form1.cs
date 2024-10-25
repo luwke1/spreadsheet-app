@@ -36,6 +36,9 @@ namespace SpreadsheetApp
         {
             this.spreadsheet = new Spreadsheet(50, 26);
             this.LoadCells(this.dataGridView1, 50);
+
+            this.dataGridView1.CellBeginEdit += this.dataGridView1_CellBeginEdit;
+            this.dataGridView1.CellEndEdit += this.dataGridView1_CellEndEdit;
             this.spreadsheet.CellPropertyChanged += this.Spreadsheet_CellPropertyChanged;
         }
 
@@ -47,9 +50,46 @@ namespace SpreadsheetApp
                 return;
             }
 
-            if (e.PropertyName == "Value")
+
+            this.dataGridView1.Rows[cell.RowIndex].Cells[cell.ColumnIndex].Value = cell.Value;
+        
+        }
+
+        private void dataGridView1_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            int row = e.RowIndex;
+            int column = e.ColumnIndex;
+            Cell cell = this.spreadsheet.GetCell(row, column);
+
+            if (cell != null)
             {
-                this.dataGridView1.Rows[cell.RowIndex].Cells[cell.ColumnIndex].Value = cell.Value;
+                this.dataGridView1.Rows[row].Cells[column].Value = cell.Text;
+            }
+        }
+
+        private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            int row = e.RowIndex;
+            int column = e.ColumnIndex;
+            DataGridViewCell dataGridViewCell = this.dataGridView1.Rows[row].Cells[column];
+
+            string newText;
+
+            if (dataGridViewCell != null && dataGridViewCell.Value != null)
+            {
+                newText = dataGridViewCell.Value.ToString();
+            }
+            else
+            {
+                newText = string.Empty;
+            }
+
+            // Update the corresponding cell in the spreadsheet engine
+            Cell cell = this.spreadsheet.GetCell(row, column);
+            if (cell != null)
+            {
+                cell.Text = newText;
+                dataGridViewCell.Value = cell.Value;
             }
         }
 
