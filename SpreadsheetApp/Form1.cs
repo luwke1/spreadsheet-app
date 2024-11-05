@@ -25,9 +25,28 @@ namespace SpreadsheetApp
         }
 
         /// <summary>
-        /// Event triggered when a property value changes.
+        /// Populates the specified dataGridView with a number of rows and sets the row headers.
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+        /// <param name="dataGrid">The dataGridView object to be populated.</param>
+        /// <param name="rows">The number of rows to add.</param>
+        public void LoadCells(DataGridView dataGrid, int rows)
+        {
+            dataGrid.Rows.Clear();
+            dataGrid.Columns.Clear();
+
+            // Make sure datGrid has a column
+            for (char c = 'A'; c <= 'Z'; c++)
+            {
+                dataGrid.Columns.Add(c.ToString(), c.ToString());
+            }
+
+            // Add the amount of rows specified with amountOfCells param
+            for (int i = 1; i < rows + 1; i++)
+            {
+                dataGrid.Rows.Add();
+                dataGrid.Rows[i - 1].HeaderCell.Value = i.ToString();
+            }
+        }
 
         /// <summary>
         /// Initializes the DataGridView by calling loadCells() to populate the rows.
@@ -50,9 +69,7 @@ namespace SpreadsheetApp
                 return;
             }
 
-
             this.dataGridView1.Rows[cell.RowIndex].Cells[cell.ColumnIndex].Value = cell.Value;
-        
         }
 
         private void dataGridView1_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
@@ -90,30 +107,6 @@ namespace SpreadsheetApp
             {
                 cell.Text = newText;
                 dataGridViewCell.Value = cell.Value;
-            }
-        }
-
-        /// <summary>
-        /// Populates the specified dataGridView with a number of rows and sets the row headers.
-        /// </summary>
-        /// <param name="dataGrid">The dataGridView object to be populated.</param>
-        /// <param name="rows">The number of rows to add.</param>
-        public void LoadCells(DataGridView dataGrid, int rows)
-        {
-            dataGrid.Rows.Clear();
-            dataGrid.Columns.Clear();
-
-            // Make sure datGrid has a column
-            for (char c = 'A'; c <= 'Z'; c++)
-            {
-                dataGrid.Columns.Add(c.ToString(), c.ToString());
-            }
-
-            // Add the amount of rows specified with amountOfCells param
-            for (int i = 1; i < rows + 1; i++)
-            {
-                dataGrid.Rows.Add();
-                dataGrid.Rows[i - 1].HeaderCell.Value = i.ToString();
             }
         }
 
