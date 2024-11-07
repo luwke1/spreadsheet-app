@@ -42,6 +42,8 @@ dotnet_diagnostic.CS8602.severity = none
 # SA1300: Element should begin with upper-case letter
 # Justified because this is showing up on things like event handlers and buttons in the Form1 (defaults to starting lowercase for form events)
 dotnet_diagnostic.SA1300.severity = none
+csharp_style_expression_bodied_lambdas = true:silent
+csharp_style_expression_bodied_local_functions = false:silent
 
 [*.{cs,vb}]
 #### Naming styles ####
@@ -94,3 +96,10 @@ dotnet_style_operator_placement_when_wrapping = beginning_of_line
 tab_width = 4
 indent_size = 4
 end_of_line = crlf
+dotnet_style_coalesce_expression = true:suggestion
+dotnet_style_null_propagation = true:suggestion
+dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
+dotnet_style_prefer_auto_properties = true:silent
+dotnet_style_object_initializer = true:suggestion
+dotnet_style_collection_initializer = true:suggestion
+dotnet_style_prefer_simplified_boolean_expressions = true:suggestion

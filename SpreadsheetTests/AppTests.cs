@@ -1,7 +1,11 @@
-using System.Windows.Forms;
+// <copyright file="AppTests.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace SpreadsheetApp
 {
+    using System.Windows.Forms;
+
     public class AppTests
     {
         [SetUp]

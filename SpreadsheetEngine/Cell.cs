@@ -1,12 +1,19 @@
-﻿using System;
-using System.ComponentModel;
+﻿// <copyright file="Cell.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace SpreadsheetEngine
 {
+    using System;
+    using System.ComponentModel;
+
     public abstract class Cell : INotifyPropertyChanged
     {
         protected string text;
         protected string value;
+
+        // Keep track of subscribed dependencies
+        private readonly System.Collections.Generic.HashSet<Cell> dependencies = new System.Collections.Generic.HashSet<Cell>();
 
         /// <summary>
         /// Initializes a new instance of the Cell class with given row and column index.
@@ -15,10 +22,10 @@ namespace SpreadsheetEngine
         /// <param name="columnIndex">The column index of the cell.</param>
         protected Cell(int rowIndex, int columnIndex)
         {
-            RowIndex = rowIndex;
-            ColumnIndex = columnIndex;
-            text = string.Empty; 
-            value = string.Empty;
+            this.RowIndex = rowIndex;
+            this.ColumnIndex = columnIndex;
+            this.text = string.Empty;
+            this.value = string.Empty;
         }
 
         /// <summary>
@@ -36,13 +43,13 @@ namespace SpreadsheetEngine
         /// </summary>
         public string Text
         {
-            get => text;
+            get => this.text;
             set
             {
-                if (text != value)
+                if (this.text != value)
                 {
-                    text = value;
-                    OnPropertyChanged("Text");
+                    this.text = value;
+                    this.OnPropertyChanged("Text");
                 }
             }
         }
@@ -52,15 +59,41 @@ namespace SpreadsheetEngine
         /// </summary>
         public string Value
         {
-            get => value;
+            get => this.value;
             internal set // Making setter only possible internally
             {
                 if (this.value != value)
                 {
                     this.value = value;
-                    OnPropertyChanged("Value");
+                    this.OnPropertyChanged("Value");
                 }
             }
+        }
+
+        /// <summary>
+        /// Adds a cell to the dependencies.
+        /// </summary>
+        /// <param name="cell">The cell to add as a dependency.</param>
+        public void AddDependency(Cell cell)
+        {
+            if (cell != null && !this.dependencies.Contains(cell))
+            {
+                this.dependencies.Add(cell);
+                cell.PropertyChanged += this.OnReferencedCellChanged;
+            }
+        }
+
+        /// <summary>
+        /// Unsubscribes from all previously referenced cells.
+        /// </summary>
+        public void UnsubscribeFromDependencies()
+        {
+            foreach (var dep in this.dependencies)
+            {
+                dep.PropertyChanged -= this.OnReferencedCellChanged;
+            }
+
+            this.dependencies.Clear();
         }
 
         /// <summary>
@@ -74,7 +107,22 @@ namespace SpreadsheetEngine
         /// <param name="propertyName">The name of the property that changed.</param>
         protected virtual void OnPropertyChanged(string propertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        /// <summary>
+        /// Event handler for changes in referenced cells.
+        /// Triggers reevaluation of this cell.
+        /// </summary>
+        private void OnReferencedCellChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Value")
+            {
+                // Trigger reevaluation by raising PropertyChanged on this cell's Text
+                // This will cause the Spreadsheet's OnCellPropertyChanged to be invoked
+                // which in turn calls UpdateCellValue
+                this.OnPropertyChanged("Text");
+            }
         }
     }
 }

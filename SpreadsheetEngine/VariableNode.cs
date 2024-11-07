@@ -1,11 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright file="VariableNode.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace SpreadsheetEngine
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
     /// <summary>
     /// Class for a node that represents a variable.
     /// </summary>
@@ -17,7 +21,8 @@ namespace SpreadsheetEngine
         /// Initializes a new instance of the VariableNode class with a variable name.
         /// </summary>
         /// <param name="name">The name of the variable.</param>
-        public VariableNode(string name, double value=0.0)
+        /// <param name="value">Value of variable.</param>
+        public VariableNode(string name, double value = 0.0)
         {
             this.name = name;
         }

@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿// <copyright file="ExpressionTree.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace SpreadsheetEngine
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using System.Threading.Tasks;
+
     /// <summary>
     /// Represents an expression tree that can parse and evaluate expressions.
     /// </summary>
@@ -19,7 +23,7 @@ namespace SpreadsheetEngine
 
         public List<string> Variables
         {
-            get { return variables.Keys.ToList(); }
+            get { return this.variables.Keys.ToList(); }
         }
 
         /// <summary>
@@ -28,7 +32,7 @@ namespace SpreadsheetEngine
         /// <param name="expression">The expression to be built.</param>
         public ExpressionTree(string expression, Spreadsheet spreadsheetMain) 
         {
-            this.root = BuildTree(expression);
+            this.root = this.BuildTree(expression);
             this.Expression = expression;
             this.spreadsheet = spreadsheetMain;
         }
@@ -41,17 +45,17 @@ namespace SpreadsheetEngine
         private Node BuildTree(string expression)
         {
             // Return null if the expression is empty
-            if (expression == null || expression == "")
+            if (expression == null || expression == string.Empty)
             {
                 return null;
             }
 
-            Queue<string> tokens = Tokenize(expression);
+            Queue<string> tokens = this.Tokenize(expression);
 
             // Converts tokens into the postfix notation
-            Queue<string> postfixTokens = ConvertToPostfix(tokens);
+            Queue<string> postfixTokens = this.ConvertToPostfix(tokens);
 
-            return BuildTreeFromPostfix(postfixTokens);
+            return this.BuildTreeFromPostfix(postfixTokens);
         }
 
         /// <summary>
@@ -102,13 +106,14 @@ namespace SpreadsheetEngine
                     // pop the left parenthesis
                     operatorStack.Pop();
                 }
-                else if (IsOperator(token))
+                else if (this.IsOperator(token))
                 {
                     // Handle operator precedence
-                    while (operatorStack.Count > 0 && IsOperator(operatorStack.Peek()) && Precedence(operatorStack.Peek()) >= Precedence(token))
+                    while (operatorStack.Count > 0 && this.IsOperator(operatorStack.Peek()) && this.Precedence(operatorStack.Peek()) >= this.Precedence(token))
                     {
                         outputQueue.Enqueue(operatorStack.Pop());
                     }
+
                     operatorStack.Push(token);
                 }
                 else
@@ -143,14 +148,14 @@ namespace SpreadsheetEngine
                 {
                     stack.Push(new ConstantNode(number));
                 }
-                else if (IsOperator(token))
+                else if (this.IsOperator(token))
                 {
                     if (stack.Count < 2) return null;
 
                     // Pop two nodes from the stack and make an operator node from them
                     var right = stack.Pop();
                     var left = stack.Pop();
-                    var operatorNode = operatorNodeFactory.CreateOperatorNode(token, left, right);
+                    var operatorNode = this.operatorNodeFactory.CreateOperatorNode(token[0], left, right);
                     stack.Push(operatorNode);
                 }
                 else
@@ -193,7 +198,7 @@ namespace SpreadsheetEngine
         /// <param name="variableValue">The variable value.</param>
         public void SetVariable(string variableName, double variableValue)
         {
-            variables.Add(variableName, variableValue);
+            this.variables.Add(variableName, variableValue);
         }
 
         /// <summary>
@@ -202,7 +207,7 @@ namespace SpreadsheetEngine
         /// <returns>The evaluated value of the expression tree</returns>
         public string Evaluate()
         {
-            if (root == null)
+            if (this.root == null)
             {
                 return "ERROR";
             }
@@ -217,10 +222,10 @@ namespace SpreadsheetEngine
                 else
                 {
                     return "ERROR";
-                }   
+                }
             }
 
-            return root.Evaluate(this.variables).ToString();
+            return this.root.Evaluate(this.variables).ToString();
         }
     }
 }

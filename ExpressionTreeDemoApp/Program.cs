@@ -25,11 +25,6 @@
                         Console.WriteLine("Enter new expression: ");
                         string newExp = Console.ReadLine();
                         expTree = new ExpressionTree(newExp, new Spreadsheet(1, 1));
-                        //Queue<string> tokens = expTree.Tokenize(newExp);
-                        //while (tokens.Count > 0)
-                        //{
-                        //    Console.WriteLine(tokens.Dequeue());
-                        //}
                         break;
                     case "2": // Allows users to set variable values
                         Console.Write("Enter variable name: ");
@@ -57,4 +52,4 @@
             }
         }
     }
-}   
+}

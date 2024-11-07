@@ -1,16 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright file="MultiplicationNode.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace SpreadsheetEngine
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
     /// <summary>
     /// Class for an Multiplication node in the expression tree.
     /// </summary>
     internal class MultiplicationNode : OperatorNode
     {
+        /// <summary>
+        /// Gets the operator symbol for the multiplication operation.
+        /// </summary>
+        public static char Operator => '*';
+
         /// <summary>
         /// Initializes a new instance of the MultiplicationNode class.
         /// </summary>

@@ -1,16 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright file="SubtractionNode.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace SpreadsheetEngine
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
     /// <summary>
     /// Class for an subtraction node in the expression tree.
     /// </summary>
     internal class SubtractionNode : OperatorNode
     {
+        /// <summary>
+        /// Gets the operator symbol for the subtraction operation.
+        /// </summary>
+        public static char Operator => '-';
+
         /// <summary>
         /// Initializes a new instance of the SubtractionNode class.
         /// </summary>
