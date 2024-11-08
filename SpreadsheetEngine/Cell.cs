@@ -11,6 +11,7 @@ namespace SpreadsheetEngine
     {
         protected string text;
         protected string value;
+        protected uint bGColor = 0xFFFFFFFF;
 
         // Keep track of subscribed dependencies
         private readonly System.Collections.Generic.HashSet<Cell> dependencies = new System.Collections.Generic.HashSet<Cell>();
@@ -37,6 +38,19 @@ namespace SpreadsheetEngine
         /// Gets the column index of the cell.
         /// </summary>
         public int ColumnIndex { get; }
+
+        /// <summary>
+        /// Gets or sets the background color of a cell.
+        /// </summary>
+        public uint BGColor
+        {
+            get => this.bGColor;
+            set
+            {
+                this.bGColor = value;
+                this.OnPropertyChanged("BGColor");
+            }
+        }
 
         /// <summary>
         /// Gets or sets the text of the cell.

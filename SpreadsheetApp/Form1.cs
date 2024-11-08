@@ -70,6 +70,13 @@ namespace SpreadsheetApp
             }
 
             this.dataGridView1.Rows[cell.RowIndex].Cells[cell.ColumnIndex].Value = cell.Value;
+
+            if (e.PropertyName == nameof(Cell.BGColor))
+            {
+                // Update backgrounbd color
+                var color = Color.FromArgb((int)cell.BGColor);
+                this.dataGridView1.Rows[cell.RowIndex].Cells[cell.ColumnIndex].Style.BackColor = color;
+            }
         }
 
         private void dataGridView1_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
@@ -131,6 +138,35 @@ namespace SpreadsheetApp
             for (int i = 0; i < 50; i++)
             {
                 this.spreadsheet.GetCell(i, 0).Text = $"=B{i + 1}";
+            }
+        }
+
+        private void changeBackgroundToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.dataGridView1.SelectedCells.Count == 0)
+            {
+                return;
+            }
+
+            using (ColorDialog colorDialog = new ColorDialog())
+            {
+                if (colorDialog.ShowDialog() == DialogResult.OK)
+                {
+                    Color selectedColor = colorDialog.Color;
+                    uint colorValue = (uint)selectedColor.ToArgb();
+
+                    foreach (DataGridViewCell selectedCell in this.dataGridView1.SelectedCells)
+                    {
+                        int rowIndex = selectedCell.RowIndex;
+                        int columnIndex = selectedCell.ColumnIndex;
+
+                        var cell = this.spreadsheet.GetCell(rowIndex, columnIndex);
+                        if (cell != null)
+                        {
+                            cell.BGColor = colorValue;
+                        }
+                    }
+                }
             }
         }
     }
