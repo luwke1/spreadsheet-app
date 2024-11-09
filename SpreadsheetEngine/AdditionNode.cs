@@ -13,22 +13,17 @@ namespace SpreadsheetEngine
     /// <summary>
     /// Class for an addition node in the expression tree.
     /// </summary>
-    internal class AdditionNode : OperatorNode
+    /// <remarks>
+    /// Initializes a <see langword="new"/> instance of the AdditionNode class.
+    /// </remarks>
+    /// <param name="left">The left child node.</param>
+    /// <param name="right">The right child node.</param>
+    internal class AdditionNode(Node left, Node right) : OperatorNode('+', left, right, 1)
     {
         /// <summary>
         /// Gets the operator symbol for the addition operation.
         /// </summary>
         public static char Operator => '+';
-
-        /// <summary>
-        /// Initializes a <see langword="new"/> instance of the AdditionNode class.
-        /// </summary>
-        /// <param name="left">The left child node.</param>
-        /// <param name="right">The right child node.</param>
-        public AdditionNode(Node left, Node right)
-            : base('+', left, right,1)
-        {
-        }
 
         /// <summary>
         /// Evaluates the addition operation of the node.

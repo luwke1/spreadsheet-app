@@ -18,7 +18,7 @@ namespace SpreadsheetEngine
         private double value;
 
         /// <summary>
-        /// Initializes a new instance of the ConstantNode class.
+        /// Initializes a new instance of the <see cref="ConstantNode"/> class.
         /// </summary>
         /// <param name="value">The constant value.</param>
         public ConstantNode(double value)
@@ -26,6 +26,7 @@ namespace SpreadsheetEngine
             this.value = value;
         }
 
+        /// <inheritdoc/>
         public override double Evaluate(Dictionary<string, double> variables)
         {
             return this.value;

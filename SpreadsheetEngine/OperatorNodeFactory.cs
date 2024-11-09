@@ -17,11 +17,8 @@ namespace SpreadsheetEngine
         // Dictionary to map operator symbols to their corresponding OperatorNode types
         private readonly Dictionary<char, Type> operators = new Dictionary<char, Type>();
 
-        // Delegate definition for operator traversal
-        private delegate void OnOperator(char op, Type type);
-
         /// <summary>
-        /// Initializes a new instance of the OperatorNodeFactory class.
+        /// Initializes a new instance of the <see cref="OperatorNodeFactory"/> class.
         /// Uses reflection to populate the operator dictionary.
         /// </summary>
         public OperatorNodeFactory()
@@ -29,6 +26,9 @@ namespace SpreadsheetEngine
             // Instantiate the delegate with a lambda that adds to the operators dictionary
             this.TraverseAvailableOperators((op, type) => this.operators.Add(op, type));
         }
+
+        // Delegate definition for operator traversal
+        private delegate void OnOperator(char op, Type type);
 
         /// <summary>
         /// Creates an operator node based on the operator character.

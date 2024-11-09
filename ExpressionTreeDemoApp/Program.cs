@@ -8,7 +8,7 @@
     {
         static void Main(string[] args)
         {
-            ExpressionTree expTree = new ExpressionTree("A1+B1+C1", new Spreadsheet(1,1));
+            ExpressionTree expTree = new ExpressionTree("A1+B1+C1", new Spreadsheet(1, 1));
 
             while (true)
             {

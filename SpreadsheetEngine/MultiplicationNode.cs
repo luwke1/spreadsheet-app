@@ -16,19 +16,19 @@ namespace SpreadsheetEngine
     internal class MultiplicationNode : OperatorNode
     {
         /// <summary>
-        /// Gets the operator symbol for the multiplication operation.
-        /// </summary>
-        public static char Operator => '*';
-
-        /// <summary>
-        /// Initializes a new instance of the MultiplicationNode class.
+        /// Initializes a new instance of the <see cref="MultiplicationNode"/> class.
         /// </summary>
         /// <param name="left">The left child node.</param>
         /// <param name="right">The right child node.</param>
         public MultiplicationNode(Node left, Node right)
-            : base('*', left, right,2)
+            : base('*', left, right, 2)
         {
         }
+
+        /// <summary>
+        /// Gets the operator symbol for the multiplication operation.
+        /// </summary>
+        public static char Operator => '*';
 
         /// <summary>
         /// Evaluates the Multiplication operation of the node.

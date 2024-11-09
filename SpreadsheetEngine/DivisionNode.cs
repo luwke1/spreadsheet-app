@@ -13,22 +13,17 @@ namespace SpreadsheetEngine
     /// <summary>
     /// Class for an DivisionNode in the expression tree.
     /// </summary>
-    internal class DivisionNode : OperatorNode
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="DivisionNode"/> class.
+    /// </remarks>
+    /// <param name="left">The left child node.</param>
+    /// <param name="right">The right child node.</param>
+    internal class DivisionNode(Node left, Node right) : OperatorNode('/', left, right, 2)
     {
         /// <summary>
         /// Gets the operator symbol for the division operation.
         /// </summary>
         public static char Operator => '/';
-
-        /// <summary>
-        /// Initializes a new instance of the DivisionNode class.
-        /// </summary>
-        /// <param name="left">The left child node.</param>
-        /// <param name="right">The right child node.</param>
-        public DivisionNode(Node left, Node right)
-            : base('/', left, right,2)
-        {
-        }
 
         /// <summary>
         /// Evaluates the division operation of the node.

@@ -7,37 +7,34 @@ namespace SpreadsheetEngine
     using System;
     using System.ComponentModel;
 
-    public abstract class Cell : INotifyPropertyChanged
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Cell"/> class with specific row and column indices.
+    /// </summary>
+    /// <param name="rowIndex">The row index of the cell.</param>
+    /// <param name="columnIndex">The column index of the cell.</param>
+    public abstract class Cell(int rowIndex, int columnIndex) : INotifyPropertyChanged
     {
-        protected string text;
-        protected string value;
-        protected uint bGColor = 0xFFFFFFFF;
-
         // Keep track of subscribed dependencies
         private readonly System.Collections.Generic.HashSet<Cell> dependencies = new System.Collections.Generic.HashSet<Cell>();
 
+        private string text = string.Empty;
+        private string value = string.Empty;
+        private uint bGColor = 0xFFFFFFFF;
+
         /// <summary>
-        /// Initializes a new instance of the Cell class with given row and column index.
+        /// Event triggered when a property value changes.
         /// </summary>
-        /// <param name="rowIndex">The row index of the cell.</param>
-        /// <param name="columnIndex">The column index of the cell.</param>
-        protected Cell(int rowIndex, int columnIndex)
-        {
-            this.RowIndex = rowIndex;
-            this.ColumnIndex = columnIndex;
-            this.text = string.Empty;
-            this.value = string.Empty;
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Gets the row index of the cell.
         /// </summary>
-        public int RowIndex { get; }
+        public int RowIndex { get; } = rowIndex;
 
         /// <summary>
         /// Gets the column index of the cell.
         /// </summary>
-        public int ColumnIndex { get; }
+        public int ColumnIndex { get; } = columnIndex;
 
         /// <summary>
         /// Gets or sets the background color of a cell.
@@ -109,11 +106,6 @@ namespace SpreadsheetEngine
 
             this.dependencies.Clear();
         }
-
-        /// <summary>
-        /// Event triggered when a property value changes.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Method to raise the PropertyEvent event.

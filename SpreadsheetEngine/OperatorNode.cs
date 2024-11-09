@@ -15,14 +15,23 @@ namespace SpreadsheetEngine
     /// </summary>
     internal abstract class OperatorNode : Node
     {
+        /// <summary>
+        /// The opchar.
+        /// </summary>
         protected char opChar;
-        protected Node left;
-        protected Node right;
-
-        public int Precedence { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the OperatorNode class with the specified operator character.
+        /// The left node.
+        /// </summary>
+        protected Node left;
+
+        /// <summary>
+        /// The right node.
+        /// </summary>
+        protected Node right;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OperatorNode"/> class with the specified operator character.
         /// </summary>
         /// <param name="opChar">The operator character.</param>
         /// <param name="left">The left child node.</param>
@@ -35,6 +44,11 @@ namespace SpreadsheetEngine
             this.right = right;
             this.Precedence = precedence;
         }
+
+        /// <summary>
+        /// Gets and sets the precedence.
+        /// </summary>
+        public int Precedence { get; private set; }
 
         /// <summary>
         /// Abstract method for evaluating the operation of the node.

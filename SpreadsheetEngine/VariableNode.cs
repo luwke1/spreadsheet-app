@@ -18,7 +18,7 @@ namespace SpreadsheetEngine
         private string name;
 
         /// <summary>
-        /// Initializes a new instance of the VariableNode class with a variable name.
+        /// Initializes a new instance of the <see cref="VariableNode"/> class with a variable name.
         /// </summary>
         /// <param name="name">The name of the variable.</param>
         /// <param name="value">Value of variable.</param>

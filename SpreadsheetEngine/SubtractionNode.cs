@@ -16,12 +16,7 @@ namespace SpreadsheetEngine
     internal class SubtractionNode : OperatorNode
     {
         /// <summary>
-        /// Gets the operator symbol for the subtraction operation.
-        /// </summary>
-        public static char Operator => '-';
-
-        /// <summary>
-        /// Initializes a new instance of the SubtractionNode class.
+        /// Initializes a new instance of the <see cref="SubtractionNode"/> class.
         /// </summary>
         /// <param name="left">The left child node.</param>
         /// <param name="right">The right child node.</param>
@@ -29,6 +24,11 @@ namespace SpreadsheetEngine
             : base('-', left, right, 1)
         {
         }
+
+        /// <summary>
+        /// Gets the operator symbol for the subtraction operation.
+        /// </summary>
+        public static char Operator => '-';
 
         /// <summary>
         /// Evaluates the subtraction operation of the node.
