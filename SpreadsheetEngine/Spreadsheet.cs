@@ -1,8 +1,12 @@
-﻿using System;
-using System.ComponentModel;
+﻿// <copyright file="Spreadsheet.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace SpreadsheetEngine
 {
+    using System;
+    using System.ComponentModel;
+
     /// <summary>
     /// Represents a spreadsheet with rows and columns of cells.
     /// </summary>
@@ -11,17 +15,13 @@ namespace SpreadsheetEngine
         private Cell[,] cells;
         private int rowCount;
         private int columnCount;
-        Dictionary<Cell, List<Cell>> dependencies = new Dictionary<Cell, List<Cell>>();
 
-
-        public int RowCount { get { return rowCount; } }
-        public int ColumnCount { get { return columnCount; } }
-        
-
-        public event PropertyChangedEventHandler CellPropertyChanged;
-        
+        // Private undo and redo stacks
+        private Stack<ICommand> undoStack = new Stack<ICommand>();
+        private Stack<ICommand> redoStack = new Stack<ICommand>();
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Spreadsheet"/> class.
         /// Initializes Spreadsheet class with specified dimensions.
         /// </summary>
         /// <param name="rows">Number of rows in the spreadsheet.</param>
@@ -29,136 +29,109 @@ namespace SpreadsheetEngine
         public Spreadsheet(int rows, int columns)
         {
             if (rows <= 0)
+            {
                 throw new ArgumentException("Number of rows must be positive.");
-            if (columns <= 0 || columns >26)
-                throw new ArgumentException("Number of columns must be positive and under 27.");
+            }
 
-            rowCount = rows;
-            columnCount = columns;
-            cells = new Cell[rows, columns];
+            if (columns <= 0 || columns > 26)
+            {
+                throw new ArgumentException("Number of columns must be positive and under 27.");
+            }
+
+            this.rowCount = rows;
+            this.columnCount = columns;
+            this.cells = new Cell[rows, columns];
 
             // Loops to add cells and track their changes
-            for (int i = 0; i < rows; i++) 
+            for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < columns; j++)
                 {
-                    cells[i, j] = CreateCell(i, j);
-                    cells[i,j].PropertyChanged += OnCellPropertyChanged;
-                }
-            
-            }
-        }
-
-        /// <summary>
-        /// Handles PropertyChanged events from a cell.
-        /// </summary>
-        private void OnCellPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            Cell cell = (Cell)sender;
-            if (cell == null) { return; }
-
-            UpdateCellValue(cell);
-
-            CellPropertyChanged?.Invoke(sender, e);
-        }
-
-        /// <summary>
-        /// Updates the Value of a cell based on the text inside.
-        /// </summary>
-        /// <param name="cell">The cell to update.</param>
-        private void UpdateCellValue(Cell cell)
-        {
-            if (cell.Text.StartsWith("="))
-            {
-                // Extracts the formula part of the text
-                string formula = cell.Text.Substring(1).Trim();
-
-                // Creates an expression tree
-                ExpressionTree expTree = new ExpressionTree(formula, this);
-
-                // Set dependency list in dictionary
-                List<Cell> dependencyCells = new List<Cell>();
-                foreach (string cellName in expTree.Variables)
-                {
-                    Cell referencedCell = this.GetCellByName(cellName);
-
-                    if (referencedCell != null)
-                    {
-                        dependencyCells.Add(referencedCell);
-                    }
-                    else
-                    {
-                        cell.Value = "ERROR";
-                        return;
-                    }
-                }
-
-                // Update dependencies for the current cell
-                AddDependencies(cell, dependencyCells);
-
-                cell.Value = expTree.Evaluate();
-          
-            }else
-            {
-                cell.Value = cell.Text;
-            }
-        }
-
-        /// <summary>
-        /// Resets and  then adds the current dependent cells that a formula relies on.
-        /// </summary>
-        /// <param name="mainCell">The cell containing the formula.</param>
-        /// <param name="dependencyCells">List of cells the formula depends on.</param>
-        private void AddDependencies(Cell mainCell, List<Cell> dependencyCells)
-        {
-            // Remove the current dependencies if they exist
-            if (dependencies.ContainsKey(mainCell))
-            {
-                dependencies[mainCell].ForEach(depCell => depCell.PropertyChanged -= OnDependentCellChanged);
-                dependencies[mainCell].Clear();
-            }
-            else
-            {
-                dependencies[mainCell] = new List<Cell>();
-            }
-
-            // Add new dependencies
-            foreach (var depCell in dependencyCells)
-            {
-                // Subscribe to the PropertyChanged event of the dependent cell
-                depCell.PropertyChanged += OnDependentCellChanged;
-                dependencies[mainCell].Add(depCell);
-            }
-        }
-
-        /// <summary>
-        /// Recalculates any formulas that depend on the changed cell.
-        /// </summary>
-        private void OnDependentCellChanged(object sender, PropertyChangedEventArgs e)
-        {
-            Cell dependentCell = sender as Cell;
-            if (dependentCell != null)
-            {
-                // Find the cells that depend on it
-                foreach (var entry in dependencies)
-                {
-                    if (entry.Value.Contains(dependentCell))
-                    {
-                        // Reevaluate the formula for the cell
-                        UpdateCellValue(entry.Key);
-                    }
+                    this.cells[i, j] = this.CreateCell(i, j);
+                    this.cells[i, j].PropertyChanged += this.OnCellPropertyChanged;
                 }
             }
         }
 
         /// <summary>
-        /// Parses a formula and returns the evaluated formula
+        /// PropertyChanged event handler.
+        /// </summary>
+        public event PropertyChangedEventHandler CellPropertyChanged;
+
+        /// <summary>
+        /// Gets the number of rows.
+        /// </summary>
+        public int RowCount
+        {
+            get { return this.rowCount; }
+        }
+
+        /// <summary>
+        /// Gets the number of columns.
+        /// </summary>
+        public int ColumnCount
+        {
+            get { return this.columnCount; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether gets a value indicating true if you can undo, false otherwise.
+        /// </summary>
+        public bool CanUndo => this.undoStack.Count > 0;
+
+        /// <summary>
+        /// Gets a value indicating whether gets a value indicating true if you can redo, false otherwise.
+        /// </summary>
+        public bool CanRedo => this.redoStack.Count > 0;
+
+        /// <summary>
+        /// Adds the passed in command to the undo stack and clears redo.
+        /// </summary>
+        /// <param name="command">The command to be added to stack.</param>
+        public void AddUndo(ICommand command)
+        {
+            if (command != null)
+            {
+                this.undoStack.Push(command);
+                this.redoStack.Clear(); // Clear redo stack when a new action is performed
+            }
+        }
+
+        /// <summary>
+        /// Gets the undo command and adds it to the redo stack.
+        /// </summary>
+        public void Undo()
+        {
+            if (this.undoStack.Count > 0)
+            {
+                ICommand command = this.undoStack.Pop();
+                command.Undo();
+                this.redoStack.Push(command);
+            }
+        }
+
+        /// <summary>
+        /// Gets the redo command and adds it to the undo stack.
+        /// </summary>
+        public void Redo()
+        {
+            if (this.redoStack.Count > 0)
+            {
+                ICommand command = this.redoStack.Pop();
+                command.Execute();
+                this.undoStack.Push(command);
+            }
+        }
+
+        /// <summary>
+        /// Parses a formula and returns the evaluated formula.
         /// </summary>
         /// <param name="formula">Hte formula to be evaluated.</param>
         /// <returns>The evaluated value returned from the formula.</returns>
         public string? GetCellValue(string formula)
         {
             Console.WriteLine(formula);
+
             // Checks if it is a valid formula
             if (formula.Length < 2 || !char.IsLetter(formula[0]) || !char.IsDigit(formula[1]))
             {
@@ -170,7 +143,7 @@ namespace SpreadsheetEngine
             int row = Convert.ToInt32(formula.Substring(1).Trim()) - 1;
 
             // Gets the cell and index location
-            Cell cell = GetCell(row, col);
+            Cell cell = this.GetCell(row, col);
             if (cell == null)
             {
                 return "ERROR";
@@ -182,13 +155,14 @@ namespace SpreadsheetEngine
         }
 
         /// <summary>
-        /// Parses a cell name and returns the associated cell
+        /// Parses a cell name and returns the associated cell.
         /// </summary>
         /// <param name="name">The cell name to be evaluated.</param>
         /// <returns>The cell that is associated with the indexed name.</returns>
         public Cell? GetCellByName(string name)
         {
             Console.WriteLine(name);
+
             // Checks if it is a valid formula
             if (name.Length < 2 || !char.IsLetter(name[0]) || !char.IsDigit(name[1]))
             {
@@ -200,11 +174,12 @@ namespace SpreadsheetEngine
             int row = Convert.ToInt32(name.Substring(1).Trim()) - 1;
 
             // Gets the cell and index location
-            Cell cell = GetCell(row, col);
+            Cell cell = this.GetCell(row, col);
             if (cell == null)
             {
                 return null;
             }
+
             return cell;
         }
 
@@ -216,14 +191,72 @@ namespace SpreadsheetEngine
         /// <returns>The cell at the specified index.</returns>
         public Cell GetCell(int row, int column)
         {
-            if (row < 0 || row >= rowCount || column < 0 || column >= columnCount)
+            if (row < 0 || row >= this.rowCount || column < 0 || column >= this.columnCount)
             {
                 return null;
             }
 
-            return cells[row, column];
+            return this.cells[row, column];
         }
 
+        /// <summary>
+        /// Handles PropertyChanged events from a cell.
+        /// </summary>
+        private void OnCellPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            Cell cell = (Cell)sender;
+            if (cell == null)
+            {
+                return;
+            }
+
+            this.UpdateCellValue(cell);
+
+            this.CellPropertyChanged?.Invoke(sender, e);
+        }
+
+        /// <summary>
+        /// Updates the Value of a cell based on the text inside.
+        /// Manages subscriptions to referenced cells' PropertyChanged events.
+        /// </summary>
+        /// <param name="cell">The cell to update.</param>
+        private void UpdateCellValue(Cell cell)
+        {
+            // Unsubscribe from all previously referenced cells
+            cell.UnsubscribeFromDependencies();
+
+            if (cell.Text.StartsWith("="))
+            {
+                // Extract the formula part
+                string formula = cell.Text.Substring(1).Trim();
+
+                // Create an expression tree (assumed to parse the formula)
+                ExpressionTree expTree = new ExpressionTree(formula, this);
+
+                // Subscribe to all referenced cells
+                foreach (string cellName in expTree.Variables)
+                {
+                    Cell referencedCell = this.GetCellByName(cellName);
+                    if (referencedCell != null)
+                    {
+                        cell.AddDependency(referencedCell);
+                    }
+                    else
+                    {
+                        cell.Value = "ERROR";
+                        return;
+                    }
+                }
+
+                // Evaluate the expression tree to update the cell's value
+                cell.Value = expTree.Evaluate();
+            }
+            else
+            {
+                // If not a formula, set the value directly
+                cell.Value = cell.Text;
+            }
+        }
 
         private Cell CreateCell(int row, int col)
         {
@@ -232,7 +265,10 @@ namespace SpreadsheetEngine
 
         private class SpreadsheetCell : Cell
         {
-            public SpreadsheetCell(int rowIndex, int columnIndex) : base(rowIndex, columnIndex) { }
+            public SpreadsheetCell(int rowIndex, int columnIndex)
+                : base(rowIndex, columnIndex)
+            {
+            }
         }
     }
 }

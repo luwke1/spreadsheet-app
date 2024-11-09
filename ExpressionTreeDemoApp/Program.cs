@@ -8,7 +8,7 @@
     {
         static void Main(string[] args)
         {
-            ExpressionTree expTree = new ExpressionTree("A1+B1+C1");
+            ExpressionTree expTree = new ExpressionTree("A1+B1+C1", new Spreadsheet(1, 1));
 
             while (true)
             {
@@ -24,12 +24,7 @@
                     case "1": // Takes a new expression and makes it the new expression tree
                         Console.WriteLine("Enter new expression: ");
                         string newExp = Console.ReadLine();
-                        expTree = new ExpressionTree(newExp);
-                        //Queue<string> tokens = expTree.Tokenize(newExp);
-                        //while (tokens.Count > 0)
-                        //{
-                        //    Console.WriteLine(tokens.Dequeue());
-                        //}
+                        expTree = new ExpressionTree(newExp, new Spreadsheet(1, 1));
                         break;
                     case "2": // Allows users to set variable values
                         Console.Write("Enter variable name: ");
@@ -46,7 +41,7 @@
                         }
                         break;
                     case "3": // Evaluates the tree and displays the evaluated value
-                        double result = expTree.Evaluate();
+                        string result = expTree.Evaluate();
                         Console.WriteLine($"The result of the expression is: {result}");
                         break;
                     case "4": // Ends the program loop and exits
@@ -57,4 +52,4 @@
             }
         }
     }
-}   
+}
