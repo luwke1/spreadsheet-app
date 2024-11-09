@@ -1,47 +1,48 @@
-﻿// <copyright file="ChangeBackgroundColorCommand.cs" company="PlaceholderCompany">
-// Copyright (c) PlaceholderCompany. All rights reserved.
-// </copyright>
+﻿using System.Collections.Generic;
 
-namespace SpreadsheetEngine.Commands
+namespace SpreadsheetEngine
 {
-    using System;
-    using SpreadsheetEngine;
-
-    /// <summary>
-    /// Command to change the background color of a cell.
-    /// </summary>
     public class ChangeBackgroundColorCommand : ICommand
     {
-        private readonly Cell cell;
+        private readonly List<Cell> cells;
         private readonly uint newColor;
-        private uint oldColor;
+        private readonly Dictionary<Cell, uint> oldColors;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ChangeBackgroundColorCommand"/> class.
-        /// </summary>
-        /// <param name="cell">The cell to modify.</param>
-        /// <param name="newColor">The new background color value.</param>
-        public ChangeBackgroundColorCommand(Cell cell, uint newColor)
+        public ChangeBackgroundColorCommand(List<Cell> cells, uint newColor)
         {
-            this.cell = cell ?? throw new ArgumentNullException(nameof(cell));
+            this.cells = cells;
             this.newColor = newColor;
-            this.oldColor = this.cell.BGColor;
+            this.oldColors = new Dictionary<Cell, uint>();
+
+            // Capture each cell's old color to support undo
+            foreach (var cell in cells)
+            {
+                this.oldColors[cell] = cell.BGColor;
+            }
         }
 
         /// <inheritdoc/>
-        public string Title => $"background color change";
+        public string Title => "background color change";
 
         /// <inheritdoc/>
         public void Execute()
         {
-            this.oldColor = this.cell.BGColor;
-            this.cell.BGColor = this.newColor;
+            foreach (var cell in this.cells)
+            {
+                cell.BGColor = this.newColor;
+            }
         }
 
         /// <inheritdoc/>
         public void Undo()
         {
-            this.cell.BGColor = this.oldColor;
+            foreach (var cell in this.cells)
+            {
+                if (this.oldColors.TryGetValue(cell, out uint oldColor))
+                {
+                    cell.BGColor = oldColor;
+                }
+            }
         }
     }
 }

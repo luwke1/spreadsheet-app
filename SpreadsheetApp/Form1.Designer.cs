@@ -119,7 +119,7 @@
             button1.TabIndex = 1;
             button1.Text = "Perform Demo";
             button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            button1.Click += Button1_Click;
             // 
             // menuStrip1
             // 
@@ -155,21 +155,21 @@
             changeBackgroundToolStripMenuItem.Name = "changeBackgroundToolStripMenuItem";
             changeBackgroundToolStripMenuItem.Size = new Size(212, 22);
             changeBackgroundToolStripMenuItem.Text = "Change background color";
-            changeBackgroundToolStripMenuItem.Click += changeBackgroundToolStripMenuItem_Click;
+            changeBackgroundToolStripMenuItem.Click += ChangeBackgroundToolStripMenuItem_Click;
             // 
             // undoToolStripMenuItem
             // 
             undoToolStripMenuItem.Name = "undoToolStripMenuItem";
             undoToolStripMenuItem.Size = new Size(180, 22);
             undoToolStripMenuItem.Text = "Undo";
-            undoToolStripMenuItem.Click += undoToolStripMenuItem_Click;
+            undoToolStripMenuItem.Click += UndoToolStripMenuItem_Click;
             // 
             // redoToolStripMenuItem
             // 
             redoToolStripMenuItem.Name = "redoToolStripMenuItem";
             redoToolStripMenuItem.Size = new Size(180, 22);
             redoToolStripMenuItem.Text = "Redo";
-            redoToolStripMenuItem.Click += redoToolStripMenuItem_Click;
+            redoToolStripMenuItem.Click += RedoToolStripMenuItem_Click;
             // 
             // Form1
             // 
