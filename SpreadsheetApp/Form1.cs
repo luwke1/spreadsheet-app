@@ -133,10 +133,12 @@ namespace SpreadsheetApp
             Cell cell = this.spreadsheet.GetCell(row, column);
             if (cell != null)
             {
-                var textChangeCommand = new ChangeTextCommand(cell, newText);
-                textChangeCommand.Execute();
-                this.spreadsheet.AddUndo(textChangeCommand);
-                dataGridViewCell.Value = cell.Value;
+                if (cell.Text != newText) {
+                    var textChangeCommand = new ChangeTextCommand(cell, newText);
+                    textChangeCommand.Execute();
+                    this.spreadsheet.AddUndo(textChangeCommand);
+                    dataGridViewCell.Value = cell.Value;
+                }
             }
 
             this.UpdateUndoRedoMenuItems();
