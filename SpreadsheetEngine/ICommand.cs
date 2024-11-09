@@ -15,12 +15,6 @@ namespace SpreadsheetEngine
         string Title { get; }
 
         /// <summary>
-        /// Gets the unique key identifying the command type.
-        /// Used by the CommandFactory for instantiation.
-        /// </summary>
-        string CommandKey { get; }
-
-        /// <summary>
         /// Executes the command.
         /// </summary>
         void Execute();
@@ -28,6 +22,6 @@ namespace SpreadsheetEngine
         /// <summary>
         /// Unexecutes (reverses) the command.
         /// </summary>
-        void Unexecute();
+        void Undo();
     }
 }

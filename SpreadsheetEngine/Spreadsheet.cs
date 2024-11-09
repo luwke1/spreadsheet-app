@@ -24,6 +24,9 @@ namespace SpreadsheetEngine
 
         public int ColumnCount { get { return this.columnCount; } }
 
+        public bool CanUndo => this.undoStack.Count > 0;
+        public bool CanRedo => this.redoStack.Count > 0;
+
         public event PropertyChangedEventHandler CellPropertyChanged;
 
         /// <summary>
@@ -106,6 +109,37 @@ namespace SpreadsheetEngine
             {
                 // If not a formula, set the value directly
                 cell.Value = cell.Text;
+            }
+        }
+
+        // Public method to add an undo action
+        public void AddUndo(ICommand command)
+        {
+            if (command != null)
+            {
+                this.undoStack.Push(command);
+                this.redoStack.Clear(); // Clear redo stack when a new action is performed
+            }
+        }
+
+        // Public methods to perform undo and redo
+        public void Undo()
+        {
+            if (this.undoStack.Count > 0)
+            {
+                ICommand command = this.undoStack.Pop();
+                command.Undo();
+                this.redoStack.Push(command);
+            }
+        }
+
+        public void Redo()
+        {
+            if (this.redoStack.Count > 0)
+            {
+                ICommand command = this.redoStack.Pop();
+                command.Execute();
+                this.undoStack.Push(command);
             }
         }
 

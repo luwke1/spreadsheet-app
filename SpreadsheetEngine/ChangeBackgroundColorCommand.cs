@@ -32,9 +32,6 @@ namespace SpreadsheetEngine.Commands
         public string Title => $"background color change";
 
         /// <inheritdoc/>
-        public string CommandKey => "ChangeBackgroundColor";
-
-        /// <inheritdoc/>
         public void Execute()
         {
             this.oldColor = this.cell.BGColor;
@@ -42,7 +39,7 @@ namespace SpreadsheetEngine.Commands
         }
 
         /// <inheritdoc/>
-        public void Unexecute()
+        public void Undo()
         {
             this.cell.BGColor = this.oldColor;
         }

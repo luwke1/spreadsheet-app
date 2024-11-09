@@ -32,9 +32,6 @@ namespace SpreadsheetEngine.Commands
         public string Title => "text change";
 
         /// <inheritdoc/>
-        public string CommandKey => "ChangeText";
-
-        /// <inheritdoc/>
         public void Execute()
         {
             this.oldText = this.cell.Text;
@@ -42,7 +39,7 @@ namespace SpreadsheetEngine.Commands
         }
 
         /// <inheritdoc/>
-        public void Unexecute()
+        public void Undo()
         {
             this.cell.Text = this.oldText;
         }

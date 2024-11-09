@@ -7,6 +7,7 @@ namespace SpreadsheetApp
     using System.ComponentModel;
     using System.Windows.Forms;
     using SpreadsheetEngine;
+    using SpreadsheetEngine.Commands;
 
     /// <summary>
     /// Form1 initializer.
@@ -79,6 +80,15 @@ namespace SpreadsheetApp
             }
         }
 
+        private void UpdateUndoRedoMenuItems()
+        {
+            this.undoToolStripMenuItem.Enabled = this.spreadsheet.CanUndo;
+            this.redoToolStripMenuItem.Enabled = this.spreadsheet.CanRedo;
+
+            this.undoToolStripMenuItem.Text = $"Undo";
+            this.redoToolStripMenuItem.Text = $"Redo";
+        }
+
         private void dataGridView1_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
             int row = e.RowIndex;
@@ -112,7 +122,9 @@ namespace SpreadsheetApp
             Cell cell = this.spreadsheet.GetCell(row, column);
             if (cell != null)
             {
-                cell.Text = newText;
+                var textChangeCommand = new ChangeTextCommand(cell, newText);
+                textChangeCommand.Execute();
+                this.spreadsheet.AddUndo(textChangeCommand);
                 dataGridViewCell.Value = cell.Value;
             }
         }
@@ -172,12 +184,14 @@ namespace SpreadsheetApp
 
         private void undoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            this.spreadsheet.Undo();
+            this.UpdateUndoRedoMenuItems();
         }
 
         private void redoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            this.spreadsheet.Redo();
+            this.UpdateUndoRedoMenuItems();
         }
     }
 }
