@@ -24,9 +24,10 @@ namespace SpreadsheetEngine
         /// <summary>
         /// Initializes a new instance of the OperatorNode class with the specified operator character.
         /// </summary>
-        /// <param name="operatorChar">The operator character.</param>
+        /// <param name="opChar">The operator character.</param>
         /// <param name="left">The left child node.</param>
         /// <param name="right">The right child node.</param>
+        /// <param name="precedence">The precedence value of the operator.</param>
         public OperatorNode(char opChar, Node left, Node right, int precedence)
         {
             this.opChar = opChar;

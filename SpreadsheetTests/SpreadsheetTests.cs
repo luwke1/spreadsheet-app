@@ -13,7 +13,7 @@ namespace SpreadsheetEngine
 
             var cell = sheet.GetCell(1, 1);
             Assert.That(cell, Is.Not.Null);
-            Assert.That(cell.Text, Is.EqualTo(""));
+            Assert.That(cell.Text, Is.EqualTo(string.Empty));
         }
 
         [Test]

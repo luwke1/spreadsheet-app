@@ -16,6 +16,10 @@ namespace SpreadsheetEngine
         private int rowCount;
         private int columnCount;
 
+        // Private undo and redo stacks
+        private Stack<ICommand> undoStack = new Stack<ICommand>();
+        private Stack<ICommand> redoStack = new Stack<ICommand>();
+
         public int RowCount { get { return this.rowCount; } }
 
         public int ColumnCount { get { return this.columnCount; } }

@@ -8,13 +8,8 @@ namespace SpreadsheetApp
 
     public class AppTests
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
         [Test]
-        public void LoadCells_50()
+        public void LoadCells50()
         {
             Form1 form = new Form1();
             DataGridView dataGridView = new DataGridView();
@@ -28,7 +23,7 @@ namespace SpreadsheetApp
 
         // Boundary Case: Ensure no rows are added when amountOfCells is zero.
         [Test]
-        public void LoadCells_Zero()
+        public void LoadCellsZero()
         {
             Form1 form = new Form1();
             DataGridView dataGridView = new DataGridView();
@@ -40,7 +35,7 @@ namespace SpreadsheetApp
 
         // Upper Boundary Case: Test with a large number of rows
         [Test]
-        public void LoadCells_Large()
+        public void LoadCellsLarge()
         {
             Form1 form = new Form1();
             DataGridView dataGridView = new DataGridView();
@@ -54,7 +49,7 @@ namespace SpreadsheetApp
 
         // Error Case: Ensure that no rows are added and handle negative values.
         [Test]
-        public void LoadCells_Negeative()
+        public void LoadCellsNegative()
         {
             Form1 form = new Form1();
             DataGridView dataGridView = new DataGridView();
