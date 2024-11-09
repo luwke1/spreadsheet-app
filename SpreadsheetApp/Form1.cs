@@ -133,7 +133,8 @@ namespace SpreadsheetApp
             Cell cell = this.spreadsheet.GetCell(row, column);
             if (cell != null)
             {
-                if (cell.Text != newText) {
+                if (cell.Text != newText)
+                {
                     var textChangeCommand = new ChangeTextCommand(cell, newText);
                     textChangeCommand.Execute();
                     this.spreadsheet.AddUndo(textChangeCommand);
