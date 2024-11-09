@@ -11,6 +11,7 @@ namespace SpreadsheetEngine
         private Cell[,] cells;
         private int rowCount;
         private int columnCount;
+        Dictionary<Cell, List<Cell>> dependencies = new Dictionary<Cell, List<Cell>>();
 
 
         public int RowCount { get { return rowCount; } }
@@ -18,6 +19,7 @@ namespace SpreadsheetEngine
         
 
         public event PropertyChangedEventHandler CellPropertyChanged;
+        
 
         /// <summary>
         /// Initializes Spreadsheet class with specified dimensions.
@@ -55,10 +57,7 @@ namespace SpreadsheetEngine
             Cell cell = (Cell)sender;
             if (cell == null) { return; }
 
-            if (e.PropertyName == "Text")
-            {
-                UpdateCellValue(cell);
-            }
+            UpdateCellValue(cell);
 
             CellPropertyChanged?.Invoke(sender, e);
         }
@@ -74,14 +73,30 @@ namespace SpreadsheetEngine
                 // Extracts the formula part of the text
                 string formula = cell.Text.Substring(1).Trim();
 
-                // Parses and evaluates the formula to get the extracted value
-                string? cellVal = ParseSimpleFormula(formula);
+                // Creates an expression tree
+                ExpressionTree expTree = new ExpressionTree(formula, this);
 
-                // Sets the current cell to the evaluated formula value
-                if (cellVal != null)
+                // Set dependency list in dictionary
+                List<Cell> dependencyCells = new List<Cell>();
+                foreach (string cellName in expTree.Variables)
                 {
-                    cell.Value = cellVal.ToString();
+                    Cell referencedCell = this.GetCellByName(cellName);
+
+                    if (referencedCell != null)
+                    {
+                        dependencyCells.Add(referencedCell);
+                    }
+                    else
+                    {
+                        cell.Value = "ERROR";
+                        return;
+                    }
                 }
+
+                // Update dependencies for the current cell
+                AddDependencies(cell, dependencyCells);
+
+                cell.Value = expTree.Evaluate();
           
             }else
             {
@@ -90,16 +105,64 @@ namespace SpreadsheetEngine
         }
 
         /// <summary>
+        /// Resets and  then adds the current dependent cells that a formula relies on.
+        /// </summary>
+        /// <param name="mainCell">The cell containing the formula.</param>
+        /// <param name="dependencyCells">List of cells the formula depends on.</param>
+        private void AddDependencies(Cell mainCell, List<Cell> dependencyCells)
+        {
+            // Remove the current dependencies if they exist
+            if (dependencies.ContainsKey(mainCell))
+            {
+                dependencies[mainCell].ForEach(depCell => depCell.PropertyChanged -= OnDependentCellChanged);
+                dependencies[mainCell].Clear();
+            }
+            else
+            {
+                dependencies[mainCell] = new List<Cell>();
+            }
+
+            // Add new dependencies
+            foreach (var depCell in dependencyCells)
+            {
+                // Subscribe to the PropertyChanged event of the dependent cell
+                depCell.PropertyChanged += OnDependentCellChanged;
+                dependencies[mainCell].Add(depCell);
+            }
+        }
+
+        /// <summary>
+        /// Recalculates any formulas that depend on the changed cell.
+        /// </summary>
+        private void OnDependentCellChanged(object sender, PropertyChangedEventArgs e)
+        {
+            Cell dependentCell = sender as Cell;
+            if (dependentCell != null)
+            {
+                // Find the cells that depend on it
+                foreach (var entry in dependencies)
+                {
+                    if (entry.Value.Contains(dependentCell))
+                    {
+                        // Reevaluate the formula for the cell
+                        UpdateCellValue(entry.Key);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Parses a formula and returns the evaluated formula
         /// </summary>
         /// <param name="formula">Hte formula to be evaluated.</param>
         /// <returns>The evaluated value returned from the formula.</returns>
-        private string? ParseSimpleFormula(string formula)
+        public string? GetCellValue(string formula)
         {
+            Console.WriteLine(formula);
             // Checks if it is a valid formula
             if (formula.Length < 2 || !char.IsLetter(formula[0]) || !char.IsDigit(formula[1]))
             {
-                throw new ArgumentException("Invalid formula format.");
+                return "ERROR";
             }
 
             // Gets col and row index, zero based indexing
@@ -110,12 +173,39 @@ namespace SpreadsheetEngine
             Cell cell = GetCell(row, col);
             if (cell == null)
             {
-                throw new InvalidOperationException("Cell not found."+ col + " " + row);
+                return "ERROR";
             }
 
             // Returns the evaluated cells value as a string
-            string cellVal = cell.Text.ToString();
+            string cellVal = cell.Value.ToString();
             return cellVal;
+        }
+
+        /// <summary>
+        /// Parses a cell name and returns the associated cell
+        /// </summary>
+        /// <param name="name">The cell name to be evaluated.</param>
+        /// <returns>The cell that is associated with the indexed name.</returns>
+        public Cell? GetCellByName(string name)
+        {
+            Console.WriteLine(name);
+            // Checks if it is a valid formula
+            if (name.Length < 2 || !char.IsLetter(name[0]) || !char.IsDigit(name[1]))
+            {
+                return null;
+            }
+
+            // Gets col and row index, zero based indexing
+            int col = name[0] - 'A';
+            int row = Convert.ToInt32(name.Substring(1).Trim()) - 1;
+
+            // Gets the cell and index location
+            Cell cell = GetCell(row, col);
+            if (cell == null)
+            {
+                return null;
+            }
+            return cell;
         }
 
         /// <summary>
