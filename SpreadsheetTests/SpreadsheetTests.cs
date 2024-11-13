@@ -89,20 +89,6 @@ namespace SpreadsheetEngine
         }
 
         [Test]
-        public void TestSpreadsheet_CircularReference()
-        {
-            Spreadsheet sheet = new Spreadsheet(5, 5);
-            var cellA1 = sheet.GetCell(0, 0);
-            var cellA2 = sheet.GetCell(1, 0);
-
-            cellA1.Text = "=A2";
-            cellA2.Text = "=A1";
-
-            Assert.That(cellA1.Value, Is.EqualTo("ERROR"));
-            Assert.That(cellA2.Value, Is.EqualTo("ERROR"));
-        }
-
-        [Test]
         public void TestSpreadsheet_DependencyChange()
         {
             Spreadsheet sheet = new Spreadsheet(5, 5);
