@@ -6,6 +6,7 @@ namespace SpreadsheetEngine
 {
     using System;
     using System.ComponentModel;
+    using System.Xml;
 
     /// <summary>
     /// Represents a spreadsheet with rows and columns of cells.
