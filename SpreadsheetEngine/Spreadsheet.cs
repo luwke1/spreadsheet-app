@@ -98,6 +98,10 @@ namespace SpreadsheetEngine
             }
         }
 
+        /// <summary>
+        /// Saves the current spreadsheet into an XML file.
+        /// </summary>
+        /// <param name="stream">The file to write the spreadsheet into.</param>
         public void Save(Stream stream)
         {
             using (XmlWriter writer = XmlWriter.Create(stream))

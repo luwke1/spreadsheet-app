@@ -238,5 +238,22 @@ namespace SpreadsheetApp
             this.spreadsheet.Redo();
             this.UpdateUndoRedoMenuItems();
         }
+
+        private void SaveSpreadsheetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "XML Files (*.xml)|*.xml",
+                DefaultExt = "xml",
+            };
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                using (FileStream fs = new FileStream(saveFileDialog.FileName, FileMode.Create))
+                {
+                    this.spreadsheet.Save(fs);
+                }
+            }
+        }
     }
 }

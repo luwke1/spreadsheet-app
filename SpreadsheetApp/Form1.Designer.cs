@@ -40,10 +40,12 @@
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             editToolStripMenuItem = new ToolStripMenuItem();
-            cellToolStripMenuItem = new ToolStripMenuItem();
-            changeBackgroundToolStripMenuItem = new ToolStripMenuItem();
             undoToolStripMenuItem = new ToolStripMenuItem();
             redoToolStripMenuItem = new ToolStripMenuItem();
+            cellToolStripMenuItem = new ToolStripMenuItem();
+            changeBackgroundToolStripMenuItem = new ToolStripMenuItem();
+            saveSpreadsheetToolStripMenuItem = new ToolStripMenuItem();
+            loadSpreadsheetToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             menuStrip1.SuspendLayout();
             SuspendLayout();
@@ -132,6 +134,7 @@
             // 
             // fileToolStripMenuItem
             // 
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { saveSpreadsheetToolStripMenuItem, loadSpreadsheetToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
@@ -142,6 +145,20 @@
             editToolStripMenuItem.Name = "editToolStripMenuItem";
             editToolStripMenuItem.Size = new Size(39, 20);
             editToolStripMenuItem.Text = "Edit";
+            // 
+            // undoToolStripMenuItem
+            // 
+            undoToolStripMenuItem.Name = "undoToolStripMenuItem";
+            undoToolStripMenuItem.Size = new Size(103, 22);
+            undoToolStripMenuItem.Text = "Undo";
+            undoToolStripMenuItem.Click += UndoToolStripMenuItem_Click;
+            // 
+            // redoToolStripMenuItem
+            // 
+            redoToolStripMenuItem.Name = "redoToolStripMenuItem";
+            redoToolStripMenuItem.Size = new Size(103, 22);
+            redoToolStripMenuItem.Text = "Redo";
+            redoToolStripMenuItem.Click += RedoToolStripMenuItem_Click;
             // 
             // cellToolStripMenuItem
             // 
@@ -157,19 +174,18 @@
             changeBackgroundToolStripMenuItem.Text = "Change background color";
             changeBackgroundToolStripMenuItem.Click += ChangeBackgroundToolStripMenuItem_Click;
             // 
-            // undoToolStripMenuItem
+            // saveSpreadsheetToolStripMenuItem
             // 
-            undoToolStripMenuItem.Name = "undoToolStripMenuItem";
-            undoToolStripMenuItem.Size = new Size(180, 22);
-            undoToolStripMenuItem.Text = "Undo";
-            undoToolStripMenuItem.Click += UndoToolStripMenuItem_Click;
+            saveSpreadsheetToolStripMenuItem.Name = "saveSpreadsheetToolStripMenuItem";
+            saveSpreadsheetToolStripMenuItem.Size = new Size(180, 22);
+            saveSpreadsheetToolStripMenuItem.Text = "Save spreadsheet";
+            saveSpreadsheetToolStripMenuItem.Click += SaveSpreadsheetToolStripMenuItem_Click;
             // 
-            // redoToolStripMenuItem
+            // loadSpreadsheetToolStripMenuItem
             // 
-            redoToolStripMenuItem.Name = "redoToolStripMenuItem";
-            redoToolStripMenuItem.Size = new Size(180, 22);
-            redoToolStripMenuItem.Text = "Redo";
-            redoToolStripMenuItem.Click += RedoToolStripMenuItem_Click;
+            loadSpreadsheetToolStripMenuItem.Name = "loadSpreadsheetToolStripMenuItem";
+            loadSpreadsheetToolStripMenuItem.Size = new Size(180, 22);
+            loadSpreadsheetToolStripMenuItem.Text = "Load spreadsheet";
             // 
             // Form1
             // 
@@ -208,5 +224,7 @@
         private ToolStripMenuItem changeBackgroundToolStripMenuItem;
         private ToolStripMenuItem undoToolStripMenuItem;
         private ToolStripMenuItem redoToolStripMenuItem;
+        private ToolStripMenuItem saveSpreadsheetToolStripMenuItem;
+        private ToolStripMenuItem loadSpreadsheetToolStripMenuItem;
     }
 }
