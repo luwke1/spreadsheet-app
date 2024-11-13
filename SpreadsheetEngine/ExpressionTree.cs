@@ -150,7 +150,7 @@ namespace SpreadsheetEngine
                 }
                 else
                 {
-                    return "ERROR";
+                    this.variables[key] = 0;
                 }
             }
 
