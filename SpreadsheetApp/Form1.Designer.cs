@@ -39,13 +39,13 @@
             button1 = new Button();
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
+            saveSpreadsheetToolStripMenuItem = new ToolStripMenuItem();
+            loadSpreadsheetToolStripMenuItem = new ToolStripMenuItem();
             editToolStripMenuItem = new ToolStripMenuItem();
             undoToolStripMenuItem = new ToolStripMenuItem();
             redoToolStripMenuItem = new ToolStripMenuItem();
             cellToolStripMenuItem = new ToolStripMenuItem();
             changeBackgroundToolStripMenuItem = new ToolStripMenuItem();
-            saveSpreadsheetToolStripMenuItem = new ToolStripMenuItem();
-            loadSpreadsheetToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             menuStrip1.SuspendLayout();
             SuspendLayout();
@@ -139,6 +139,20 @@
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
             // 
+            // saveSpreadsheetToolStripMenuItem
+            // 
+            saveSpreadsheetToolStripMenuItem.Name = "saveSpreadsheetToolStripMenuItem";
+            saveSpreadsheetToolStripMenuItem.Size = new Size(180, 22);
+            saveSpreadsheetToolStripMenuItem.Text = "Save spreadsheet";
+            saveSpreadsheetToolStripMenuItem.Click += SaveSpreadsheetToolStripMenuItem_Click;
+            // 
+            // loadSpreadsheetToolStripMenuItem
+            // 
+            loadSpreadsheetToolStripMenuItem.Name = "loadSpreadsheetToolStripMenuItem";
+            loadSpreadsheetToolStripMenuItem.Size = new Size(180, 22);
+            loadSpreadsheetToolStripMenuItem.Text = "Load spreadsheet";
+            loadSpreadsheetToolStripMenuItem.Click += LoadSpreadsheetToolStripMenuItem_Click;
+            // 
             // editToolStripMenuItem
             // 
             editToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { undoToolStripMenuItem, redoToolStripMenuItem });
@@ -173,19 +187,6 @@
             changeBackgroundToolStripMenuItem.Size = new Size(212, 22);
             changeBackgroundToolStripMenuItem.Text = "Change background color";
             changeBackgroundToolStripMenuItem.Click += ChangeBackgroundToolStripMenuItem_Click;
-            // 
-            // saveSpreadsheetToolStripMenuItem
-            // 
-            saveSpreadsheetToolStripMenuItem.Name = "saveSpreadsheetToolStripMenuItem";
-            saveSpreadsheetToolStripMenuItem.Size = new Size(180, 22);
-            saveSpreadsheetToolStripMenuItem.Text = "Save spreadsheet";
-            saveSpreadsheetToolStripMenuItem.Click += SaveSpreadsheetToolStripMenuItem_Click;
-            // 
-            // loadSpreadsheetToolStripMenuItem
-            // 
-            loadSpreadsheetToolStripMenuItem.Name = "loadSpreadsheetToolStripMenuItem";
-            loadSpreadsheetToolStripMenuItem.Size = new Size(180, 22);
-            loadSpreadsheetToolStripMenuItem.Text = "Load spreadsheet";
             // 
             // Form1
             // 

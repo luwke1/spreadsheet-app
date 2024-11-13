@@ -6,6 +6,8 @@ namespace SpreadsheetEngine
 {
     using System;
     using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Drawing;
     using System.Xml;
 
     /// <summary>
@@ -99,6 +101,23 @@ namespace SpreadsheetEngine
         }
 
         /// <summary>
+        /// Clears and resets the spreadsheet.
+        /// </summary>
+        public void ClearSpreadsheet()
+        {
+            // Clear existing data
+            for (int i = 0; i < this.rowCount; i++)
+            {
+                for (int j = 0; j < this.columnCount; j++)
+                {
+                    Cell cell = this.cells[i, j];
+                    cell.Text = string.Empty;
+                    cell.BGColor = 0xFFFFFFFF;
+                }
+            }
+        }
+
+        /// <summary>
         /// Saves the current spreadsheet into an XML file.
         /// </summary>
         /// <param name="stream">The file to write the spreadsheet into.</param>
@@ -139,6 +158,76 @@ namespace SpreadsheetEngine
 
                 writer.WriteEndElement();
                 writer.WriteEndDocument();
+            }
+        }
+
+        /// <summary>
+        /// Loads the file stream into the spreadsheet.
+        /// </summary>
+        /// <param name="stream">The file to load into the spreadsheet.</param>
+        public void Load(Stream stream)
+        {
+            this.ClearSpreadsheet();
+
+            this.undoStack.Clear();
+            this.redoStack.Clear();
+
+            using (XmlReader reader = XmlReader.Create(stream))
+            {
+                reader.MoveToContent();
+
+                while (reader.ReadToFollowing("cell"))
+                {
+                    string cellName = reader.GetAttribute("name");
+                    uint bgcolor = 0xFFFFFFFF;
+                    string text = string.Empty;
+
+                    if (reader.IsEmptyElement)
+                    {
+                        // Do nothing for empty elements
+                    }
+                    else
+                    {
+                        // Move to the first child of the cell element
+                        reader.Read();
+
+                        // Loop through all child nodes of the current cell element
+                        while (reader.IsStartElement())
+                        {
+                            if (reader.NodeType == XmlNodeType.Element)
+                            {
+                                switch (reader.Name)
+                                {
+                                    case "bgcolor":
+                                        string colorStr = reader.ReadElementContentAsString();
+                                        if (uint.TryParse(colorStr, System.Globalization.NumberStyles.HexNumber, null, out uint parsedColor))
+                                        {
+                                            bgcolor = parsedColor;
+                                        }
+
+                                        break;
+                                    case "text":
+                                        text = reader.ReadElementContentAsString();
+                                        break;
+                                    default:
+                                        reader.Skip();
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                reader.Read();
+                            }
+                        }
+                    }
+
+                    Cell cell = this.GetCellByName(cellName);
+                    if (cell != null)
+                    {
+                        cell.Text = text;
+                        cell.BGColor = bgcolor;
+                    }
+                }
             }
         }
 

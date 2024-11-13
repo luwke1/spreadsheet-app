@@ -255,5 +255,24 @@ namespace SpreadsheetApp
                 }
             }
         }
+
+        private void LoadSpreadsheetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "XML Files (*.xml)|*.xml",
+                DefaultExt = "xml",
+            };
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                using (FileStream fs = new FileStream(openFileDialog.FileName, FileMode.Open))
+                {
+                    this.spreadsheet.Load(fs);
+                }
+
+                this.dataGridView1.Refresh();
+            }
+        }
     }
 }
