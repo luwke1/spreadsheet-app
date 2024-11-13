@@ -98,6 +98,46 @@ namespace SpreadsheetEngine
             }
         }
 
+        public void Save(Stream stream)
+        {
+            using (XmlWriter writer = XmlWriter.Create(stream))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("spreadsheet");
+
+                for (int i = 0; i < this.rowCount; i++)
+                {
+                    for (int j = 0; j < this.columnCount; j++)
+                    {
+                        Cell cell = this.GetCell(i, j);
+
+                        if (cell.BGColor != 0xFFFFFFFF || !string.IsNullOrEmpty(cell.Text))
+                        {
+                            string cellName = this.GetCellName(cell.RowIndex, cell.ColumnIndex);
+
+                            writer.WriteStartElement("cell");
+                            writer.WriteAttributeString("name", cellName);
+
+                            if (cell.BGColor != 0xFFFFFFFF)
+                            {
+                                writer.WriteElementString("bgcolor", cell.BGColor.ToString("X8"));
+                            }
+
+                            if (!string.IsNullOrEmpty(cell.Text))
+                            {
+                                writer.WriteElementString("text", cell.Text);
+                            }
+
+                            writer.WriteEndElement();
+                        }
+                    }
+                }
+
+                writer.WriteEndElement();
+                writer.WriteEndDocument();
+            }
+        }
+
         /// <summary>
         /// Gets the undo command and adds it to the redo stack.
         /// </summary>
@@ -125,23 +165,23 @@ namespace SpreadsheetEngine
         }
 
         /// <summary>
-        /// Parses a formula and returns the evaluated formula.
+        /// Parses a cell name and returns the value of the cell.
         /// </summary>
-        /// <param name="formula">Hte formula to be evaluated.</param>
+        /// <param name="name">The name of the cell to be evaluated.</param>
         /// <returns>The evaluated value returned from the formula.</returns>
-        public string? GetCellValue(string formula)
+        public string? GetCellValue(string name)
         {
-            Console.WriteLine(formula);
+            Console.WriteLine(name);
 
             // Checks if it is a valid formula
-            if (formula.Length < 2 || !char.IsLetter(formula[0]) || !char.IsDigit(formula[1]))
+            if (name.Length < 2 || !char.IsLetter(name[0]) || !char.IsDigit(name[1]))
             {
                 return "ERROR";
             }
 
             // Gets col and row index, zero based indexing
-            int col = formula[0] - 'A';
-            int row = Convert.ToInt32(formula.Substring(1).Trim()) - 1;
+            int col = name[0] - 'A';
+            int row = Convert.ToInt32(name.Substring(1).Trim()) - 1;
 
             // Gets the cell and index location
             Cell cell = this.GetCell(row, col);
@@ -153,6 +193,19 @@ namespace SpreadsheetEngine
             // Returns the evaluated cells value as a string
             string cellVal = cell.Value.ToString();
             return cellVal;
+        }
+
+        /// <summary>
+        /// Generates the cell name from indices.
+        /// </summary>
+        /// <param name="row">The row index of the cell.</param>
+        /// <param name="col">The column index of the cell.</param>
+        /// <returns>The name that represents thats cells location.</returns>
+        public string GetCellName(int row, int col)
+        {
+            char columnName = (char)('A' + col);
+            int rowName = row + 1;
+            return $"{columnName}{rowName}";
         }
 
         /// <summary>
