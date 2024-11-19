@@ -82,16 +82,27 @@ namespace SpreadsheetEngine
         }
 
         /// <summary>
-        /// Adds a cell to the dependencies.
+        /// Adds a cell to the dependencies while checking for circular references.
         /// </summary>
         /// <param name="cell">The cell to add as a dependency.</param>
-        public void AddDependency(Cell cell)
+        /// <returns>True if the dependency was added successfully, false if a circular reference was detected.</returns>
+        public bool AddDependency(Cell cell)
         {
-            if (cell != null && !this.dependencies.Contains(cell))
+            if (cell == null || this.dependencies.Contains(cell))
             {
-                this.dependencies.Add(cell);
-                cell.PropertyChanged += this.OnReferencedCellChanged;
+                return true;
             }
+
+            // Check for circular reference
+            if (this.HasCircularReference(cell))
+            {
+                return false;
+            }
+
+            // If no circular reference, add the dependency
+            this.dependencies.Add(cell);
+            cell.PropertyChanged += this.OnReferencedCellChanged;
+            return true;
         }
 
         /// <summary>
@@ -117,6 +128,54 @@ namespace SpreadsheetEngine
         }
 
         /// <summary>
+        /// Checks if adding the specified cell as a dependency would create a circular reference.
+        /// </summary>
+        /// <param name="cellToCheck">The cell to check for circular reference.</param>
+        /// <returns>True if a circular reference exists, false otherwise.</returns>
+        private bool HasCircularReference(Cell cellToCheck)
+        {
+            // Use a HashSet to keep track of visited cells
+            System.Collections.Generic.HashSet<Cell> visited = new System.Collections.Generic.HashSet<Cell>();
+            return this.HasCircularReferenceRecursive(cellToCheck, visited);
+        }
+
+        /// <summary>
+        /// Recursively checks for a circular reference in the dependency chain.
+        /// </summary>
+        /// <param name="currentCell">The current cell being checked.</param>
+        /// <param name="visited">A set of cells that have been visited during the check.</param>
+        /// <returns>True if a circular reference is found, false otherwise.</returns>
+        private bool HasCircularReferenceRecursive(Cell currentCell, System.Collections.Generic.HashSet<Cell> visited)
+        {
+            if (currentCell == null)
+            {
+                return false;
+            }
+
+            // Circular reference exists
+            if (currentCell == this)
+            {
+                return true;
+            }
+
+            // Cell already visited at some point, didnt find circular reference
+            if (!visited.Add(currentCell))
+            {
+                return false;
+            }
+
+            foreach (Cell dependency in currentCell.dependencies)
+            {
+                if (this.HasCircularReferenceRecursive(dependency, visited))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Event handler for changes in referenced cells.
         /// Triggers reevaluation of this cell.
         /// </summary>
@@ -124,9 +183,6 @@ namespace SpreadsheetEngine
         {
             if (e.PropertyName == "Value")
             {
-                // Trigger reevaluation by raising PropertyChanged on this cell's Text
-                // This will cause the Spreadsheet's OnCellPropertyChanged to be invoked
-                // which in turn calls UpdateCellValue
                 this.OnPropertyChanged("Text");
             }
         }

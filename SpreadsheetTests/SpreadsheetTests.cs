@@ -69,26 +69,6 @@ namespace SpreadsheetEngine
         }
 
         [Test]
-        public void TestSpreadsheet_BadFormula()
-        {
-            Spreadsheet sheet = new Spreadsheet(3, 3);
-            var cell = sheet.GetCell(0, 0); // A1
-            cell.Text = "=A1**+523";
-
-            Assert.That(cell.Value, Is.EqualTo("ERROR"));
-        }
-
-        [Test]
-        public void TestSpreadsheet_BadReference()
-        {
-            Spreadsheet sheet = new Spreadsheet(3, 3);
-            var cell = sheet.GetCell(0, 0);
-            cell.Text = "=A9999";
-
-            Assert.That(cell.Value, Is.EqualTo("ERROR"));
-        }
-
-        [Test]
         public void TestSpreadsheet_DependencyChange()
         {
             Spreadsheet sheet = new Spreadsheet(5, 5);

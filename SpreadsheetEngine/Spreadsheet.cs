@@ -386,11 +386,15 @@ namespace SpreadsheetEngine
                     Cell referencedCell = this.GetCellByName(cellName);
                     if (referencedCell != null)
                     {
-                        cell.AddDependency(referencedCell);
+                        if (!cell.AddDependency(referencedCell))
+                        {
+                            cell.Value = "!(circular reference)";
+                            return;
+                        }
                     }
                     else
                     {
-                        cell.Value = "ERROR";
+                        cell.Value = "ERROR: Invalid Reference";
                         return;
                     }
                 }
